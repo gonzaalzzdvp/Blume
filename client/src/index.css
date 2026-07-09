@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+html {
+}
+
+:root {
+  --pinkRose: #ed809d;
+  --citron: #c9c769;
+  --blackBean: #461312;
+  --blackBlume: #343434;
+  --whiteBlume: #FEFFEF;
+}
