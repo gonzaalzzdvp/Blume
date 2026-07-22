@@ -19,7 +19,7 @@ export default function ProductRow({ product, onEdit, onDelete }) {
       "
     >
       <img
-        src={product.image}
+        src={product.image_url}
         alt={product.title}
         className="w-16 h-16 object-cover rounded-lg"
       />

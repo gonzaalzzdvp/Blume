@@ -43,7 +43,7 @@ export default function RegisterForm() {
           {...register("first_name", {
             required: true,
           })}
-          className="w-full border p-3 rounded-lg"
+          className="w-full p-3 rounded-lg inputShadow"
         />
 
         <input
@@ -51,7 +51,7 @@ export default function RegisterForm() {
           {...register("last_name", {
             required: true,
           })}
-          className="w-full border p-3 rounded-lg"
+          className="w-full p-3 rounded-lg inputShadow"
         />
       </div>
 
@@ -61,7 +61,7 @@ export default function RegisterForm() {
         {...register("email", {
           required: true,
         })}
-        className="w-full border p-3 rounded-lg"
+        className="w-full p-3 rounded-lg inputShadow"
       />
 
       <input
@@ -71,7 +71,7 @@ export default function RegisterForm() {
           required: true,
           minLength: 8,
         })}
-        className="w-full border p-3 rounded-lg"
+        className="w-full p-3 rounded-lg inputShadow"
       />
 
       <input
@@ -81,7 +81,7 @@ export default function RegisterForm() {
           validate: (value) =>
             value === watch("password") || "Las contraseñas no coinciden.",
         })}
-        className="w-full border p-3 rounded-lg"
+        className="w-full p-3 rounded-lg inputShadow"
       />
 
       {errors.confirm_password && (
@@ -106,7 +106,7 @@ export default function RegisterForm() {
 
       <p className="text-center">
         ¿Ya tienes cuenta?
-        <Link to="/login" className="ml-2 text-(--pinkRose) ">
+        <Link to="/login" className="ml-2 text-(--pinkRose) hover:underline">
           Iniciar sesión
         </Link>
       </p>

@@ -15,30 +15,11 @@ export default function Header() {
 
   return (
     <header
-      className="
-      h-16
-        bg-white
-        border-b
-        py-2
-        flex
-        justify-between
-        items-center
-      "
-    >
+      className="bg-white h-16 py-2 flex justify-between items-center border-b border-(--grayBlume) shadow-md">
       <div>
         <button
           onClick={toggleSidebar}
-          className="
-          w-10
-          h-10
-          rounded-r-lg
-          hover:bg-(--pinkRose)
-          border-y border-r
-          border-(--pinkRose)
-          transition
-          cursor-pointer
-        "
-        >
+          className="w-10 h-10 rounded-r-lg hover:bg-(--pinkRose) hover:text-(--whiteBlume) border-y border-r border-(--grayBlume) shadow-sm transition cursor-pointer">
           <FontAwesomeIcon icon={collapsed ? faAnglesRight : faAnglesLeft} />
         </button>
       </div>

@@ -50,17 +50,8 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`
-        bg-white
-        border-r
-        border-gray-400
-        shadow-md
-        transition-all
-        duration-300
-        ${collapsed ? "w-20" : "w-72"}
-    `}
-    >
-      <div className="h-16 flex items-center justify-center border-b">
+      className={`bg-white border-r border-(--grayBlume) shadow-md transition-all duration-300 ${collapsed ? "w-20" : "w-72"}`}>
+      <div className="h-16 flex items-center justify-center">
         <Link to="/">
           <h1 className="text-2xl text-(--pinkRose)">Blume</h1>
         </Link>

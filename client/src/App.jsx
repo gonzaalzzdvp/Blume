@@ -7,14 +7,19 @@ import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import CartPage from "./pages/Cart/CartPage";
 import Checkout from "./pages/Cart/Checkout";
-import Orders from "./pages/Cart/Orders";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Auth/Profile";
+import ThankYouPage from "./pages/ThankYouPage";
 
 import Dashboard from "./admin/pages/Dashboard";
+
 import ProductFormPage from "./admin/pages/Products/ProductFormPage";
 import ProductList from "./admin/pages/Products/ProductList";
+import CategoriesPage from "./admin/pages/categories/CategoriesPage";
+import CategoryFormPage from "./admin/pages/categories/CategoryFormPage";
+import OrderPage from "./admin/pages/Orders/OrdersPage";
+import OrderDetailPage from "./admin/pages/Orders/OrderDetailPage";
 
 import AdminLayout from "./admin/layouts/AdminLayout";
 import Layout from "./layouts/Layout";
@@ -24,9 +29,12 @@ import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import AdminRoute from "./routes/AdminRoute";
 
+import ScrollToTop from "./helper/ScrollToTop";
+
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
@@ -42,7 +50,6 @@ function App() {
               </PublicRoute>
             }
           />
-
           <Route
             path="/register"
             element={
@@ -51,7 +58,6 @@ function App() {
               </PublicRoute>
             }
           />
-
           <Route
             path="/profile"
             element={
@@ -60,7 +66,6 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route
             path="/checkout"
             element={
@@ -69,12 +74,11 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route
-            path="/orders"
+            path="/thank-you"
             element={
               <PrivateRoute>
-                <Orders />
+                <ThankYouPage />
               </PrivateRoute>
             }
           />
@@ -95,6 +99,12 @@ function App() {
           <Route path="products" element={<ProductList />} />
           <Route path="products/new" element={<ProductFormPage />} />
           <Route path="products/:id/edit" element={<ProductFormPage />} />
+
+          <Route path="categories" element={<CategoriesPage />} />
+          <Route path="categories/new" element={<CategoryFormPage />} />
+          <Route path="categories/:id/edit" element={<CategoryFormPage />} />
+          <Route path="orders" element={<OrderPage />} />
+          <Route path="orders/:id" element={<OrderDetailPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -18,7 +18,10 @@ export default function ProductFormPage() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState({});
-  const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
+  const [deletedImages, setDeletedImages] = useState([]);
+  const [imageOrder, setImageOrder] = useState([]);
 
   useEffect(() => {
     loadCategories();
@@ -43,35 +46,55 @@ export default function ProductFormPage() {
       const data = await getProduct(id);
 
       setProduct(data);
+
+      const images = (data.images || [])
+        .sort((a, b) => a.position - b.position)
+        .map((img, index) => ({
+          ...img,
+          isMain: index === 0,
+        }));
+
+      setExistingImages(images);
+
+      setImageOrder(images.map((img) => img.id));
     } catch (err) {
+      console.error(err);
       toast.error("No se pudo cargar el producto");
     }
   }
 
-  async function handleSubmit(formData) {
+  async function handleSubmit(data) {
     try {
       setLoading(true);
 
+      const form = new FormData();
+
+      Object.entries(data).forEach(([key, value]) => {
+        form.append(key, value);
+      });
+
+      if (newImages.length > 0) {
+        form.set("image", newImages[0]);
+
+        newImages.slice(1).forEach((image) => {
+          form.append("gallery_images", image);
+        });
+      }
+
+      deletedImages.forEach((id) => {
+        form.append("deleted_images", id);
+      });
+
+      imageOrder.forEach((id) => {
+        form.append("image_order", id);
+      });
+
       if (editing) {
-        await updateProduct(id, formData);
+        await updateProduct(id, form);
 
         toast.success("Producto actualizado");
       } else {
-        const formData = new FormData();
-
-        Object.entries(data).forEach(([key, value]) => {
-          formData.append(key, value);
-        });
-
-        if (images.length > 0) {
-          formData.append("image", images[0]);
-
-          images.slice(1).forEach((image) => {
-            formData.append("gallery_images", image);
-          });
-        }
-
-        await createProduct(formData);
+        await createProduct(form);
 
         toast.success("Producto creado");
       }
@@ -79,7 +102,6 @@ export default function ProductFormPage() {
       navigate("/admin/products");
     } catch (error) {
       console.error(error);
-
       console.log(error.response?.data);
 
       toast.error("No fue posible guardar el producto.");
@@ -88,14 +110,25 @@ export default function ProductFormPage() {
     }
   }
 
+  function handleCancel() {
+    navigate("/admin/products");
+  }
+
   return (
     <ProductForm
       initialData={product}
       categories={categories}
       loading={loading}
       onSubmit={handleSubmit}
-      images={images}
-      setImages={setImages}
+      onCancel={handleCancel}
+      existingImages={existingImages}
+      setExistingImages={setExistingImages}
+      newImages={newImages}
+      setNewImages={setNewImages}
+      deletedImages={deletedImages}
+      setDeletedImages={setDeletedImages}
+      imageOrder={imageOrder}
+      setImageOrder={setImageOrder}
     />
   );
 }

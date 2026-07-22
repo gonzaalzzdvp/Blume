@@ -1,15 +1,26 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { BRANDS, SIZES, HAIR_LINES } from "../../constants/productOptions";
-import ImageUploader from "../Common/ImageUploader";
+import ImageUploader from "../Common/ImageUploader/ImageUploader";
 
 export default function ProductForm({
   initialData = {},
   categories = [],
   loading = false,
   onSubmit,
-  images,
-  setImages,
+  onCancel,
+
+  existingImages,
+  setExistingImages,
+  
+  newImages,
+  setNewImages,
+
+  deletedImages,
+  setDeletedImages,
+
+  imageOrder,
+  setImageOrder,
 }) {
   const {
     register,
@@ -17,7 +28,6 @@ export default function ProductForm({
     reset,
     formState: { errors },
   } = useForm();
-  const [image, setImage] = useState(null);
 
   useEffect(() => {
     reset({
@@ -35,18 +45,12 @@ export default function ProductForm({
       is_active:
         initialData.is_active !== undefined ? initialData.is_active : true,
     });
-    setImage(null);
   }, [initialData, reset]);
 
   return (
     <form
       className="grid lg:grid-cols-3 gap-8"
-      onSubmit={handleSubmit((data) =>
-        onSubmit({
-          ...data,
-          image,
-        }),
-      )}
+      onSubmit={handleSubmit(onSubmit)}
     >
       {/* INFORMACIÓN GENERAL */}
 
@@ -224,7 +228,16 @@ export default function ProductForm({
 
       {/* IMAGENES */}
       <div className="bg-white col-start-1 col-end-3 space-y-8 rounded-2xl shadow p-8">
-        <ImageUploader images={images} setImages={setImages} />
+        <ImageUploader
+          existingImages={existingImages}
+          setExistingImages={setExistingImages}
+          deletedImages={deletedImages}
+          setDeletedImages={setDeletedImages}
+          newImages={newImages}
+          setNewImages={setNewImages}
+          imageOrder={imageOrder}
+          setImageOrder={setImageOrder}
+        />
       </div>
 
       {/* BOTONES */}
@@ -232,6 +245,7 @@ export default function ProductForm({
       <div className="flex justify-end items-center gap-4">
         <button
           type="button"
+          onClick={onCancel}
           className="
             h-20
             px-6

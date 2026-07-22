@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Category, Product, ProductImage
-
+import cloudinary.utils
 
 class CategorySerializer(serializers.ModelSerializer):
 
@@ -14,20 +14,27 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductImage
+
         fields = [
             "id",
             "image",
-            "alt_text"
+            "alt_text",
+            "position",
         ]
 
     def get_image(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+
+        if not obj.image:
+            return None
+
+        return cloudinary.utils.cloudinary_url(
+            obj.image.public_id,
+            secure=True,
+        )[0]
     
 class ProductSerializer(serializers.ModelSerializer):
 
-    image = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
 
     images = ProductImageSerializer(
         many=True,
@@ -39,13 +46,23 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    category_slug = serializers.CharField(
+        source="category.slug",
+        read_only=True
+    )
+
     class Meta:
         model = Product
 
         fields = "__all__"
 
-    def get_image(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+    def get_image_url(self, obj):
+
+        if not obj.image:
+            return None
+
+        return cloudinary.utils.cloudinary_url(
+            obj.image.public_id,
+            secure=True,
+        )[0]
         

@@ -1,19 +1,36 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics
-from rest_framework.filters import OrderingFilter, SearchFilter
+
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import (
+    OrderingFilter,
+    SearchFilter,
+)
+from rest_framework.parsers import (
+    MultiPartParser,
+    FormParser,
+)
+
 from products.models import Product
-from admin_api.serializers.product import AdminProductSerializer
+
+from admin_api.serializers.product import (
+    AdminProductSerializer,
+)
+
 from users.permissions import IsAdmin
-from rest_framework.parsers import MultiPartParser, FormParser
 
 
-class AdminProductListCreateView(generics.ListCreateAPIView):
+class AdminProductViewSet(ModelViewSet):
 
     queryset = Product.objects.all()
 
     serializer_class = AdminProductSerializer
 
     permission_classes = [IsAdmin]
+
+    parser_classes = [
+        MultiPartParser,
+        FormParser,
+    ]
 
     filter_backends = [
         DjangoFilterBackend,
@@ -40,21 +57,3 @@ class AdminProductListCreateView(generics.ListCreateAPIView):
     ordering = [
         "-created_at",
     ]
-
-    parser_classes = [
-    MultiPartParser,
-    FormParser,
-]
-
-class AdminProductDetailView(generics.RetrieveUpdateDestroyAPIView):
-
-    queryset = Product.objects.all()
-
-    serializer_class = AdminProductSerializer
-
-    permission_classes = [IsAdmin]
-
-    parser_classes = [
-    MultiPartParser,
-    FormParser,
-]

@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDebounce } from "use-debounce";
 
-import { getProducts } from "../../services/productService";
-import { getCategories } from "../../services/productService";
+import { getProducts, getCategories } from "../../services/productService";
 
 import ProductCard from "../Product/ProductCard";
 import CategorySidebar from "../Category/CategorySidebar";
@@ -12,9 +11,10 @@ import SearchBar from "../Search/SearchBar";
 export default function Catalog() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchParams] = useSearchParams();
   const urlSearch = searchParams.get("search") || "";
+  const urlCategory = searchParams.get("category") || null;
+  const [selectedCategory, setSelectedCategory] = useState(urlCategory);
   const [search, setSearch] = useState(urlSearch);
   const [debouncedSearch] = useDebounce(search, 500);
 
@@ -30,6 +30,10 @@ export default function Catalog() {
     setSearch(urlSearch);
   }, [urlSearch]);
 
+  useEffect(() => {
+    setSelectedCategory(urlCategory);
+  }, [urlCategory]);
+
   const loadCategories = async () => {
     try {
       const data = await getCategories();
@@ -42,7 +46,6 @@ export default function Catalog() {
   const loadProducts = async () => {
     try {
       const data = await getProducts(debouncedSearch, selectedCategory);
-
       setProducts(data);
     } catch (error) {
       console.error(error);
@@ -51,7 +54,7 @@ export default function Catalog() {
 
   return (
     <main className="mt-22 min-h-[calc(100vh-88px)] max-w-7xl mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-8">Catálogo</h1>
+      <h1 className="text-4xl font-bold mb-8 text-(--orangeBlume)">Catálogo</h1>
 
       <div className="flex gap-10">
         <CategorySidebar

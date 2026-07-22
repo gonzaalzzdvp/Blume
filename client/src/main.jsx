@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")).render(
       <CartProvider>
         <App />
         <Toaster
-          position="top-right"
+          position="bottom-center"
           reverseOrder={false}
           toastOptions={{
             duration: 3000,

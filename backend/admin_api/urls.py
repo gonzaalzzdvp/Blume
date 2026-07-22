@@ -1,21 +1,35 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .views.products import (
-    AdminProductListCreateView,
-    AdminProductDetailView,
+from admin_api.views.category import (
+    AdminCategoryViewSet,
 )
 
-urlpatterns = [
+from admin_api.views.products import (
+    AdminProductViewSet,
+)
 
-    path(
-        "products/",
-        AdminProductListCreateView.as_view(),
-        name="admin-products",
-    ),
+from admin_api.views.orders import (
+    AdminOrderViewSet,
+)
 
-    path(
-        "products/<int:pk>/",
-        AdminProductDetailView.as_view(),
-        name="admin-product-detail",
-    ),
-]
+router = DefaultRouter()
+
+router.register(
+    "products",
+    AdminProductViewSet,
+    basename="admin-products",
+)
+
+router.register(
+    "categories",
+    AdminCategoryViewSet,
+    basename="admin-categories",
+)
+
+router.register(
+    "orders",
+    AdminOrderViewSet,
+    basename="admin-orders",
+)
+
+urlpatterns = router.urls

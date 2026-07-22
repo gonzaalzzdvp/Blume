@@ -4,9 +4,9 @@ export default function CategorySidebar({
   onSelectCategory,
 }) {
   return (
-    <aside className="w-64 border-r border-(--citron) pr-6">
+    <aside className="w-64 pr-6">
 
-      <h2 className="text-xl font-semibold mb-4">
+      <h2 className="text-xl font-semibold mb-4 ">
         Categorías
       </h2>
 

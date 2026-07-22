@@ -13,13 +13,12 @@ export default function CartItem({ item }) {
   return (
     <div
       className="
+        p-5
         flex
         justify-between
         items-center
-        border
-        border-(--citron)
         rounded-xl
-        p-5
+        shadow-md
       "
     >
       <div className="flex gap-5">
@@ -61,7 +60,7 @@ export default function CartItem({ item }) {
 
             <button
               onClick={() => decreaseQuantity(item.id)}
-              className="w-8 h-8 border rounded-full hover:bg-gray-100 cursor-pointer"
+              className="w-8 h-8 shadow-sm border border-(--grayBlume) rounded-full hover:bg-(--grayBlume) cursor-pointer"
             >
               -
             </button>
@@ -72,7 +71,7 @@ export default function CartItem({ item }) {
 
             <button
               onClick={() => increaseQuantity(item.id)}
-              className="w-8 h-8 border rounded-full hover:bg-gray-100 cursor-pointer"
+              className="w-8 h-8 shadow-sm border border-(--grayBlume) rounded-full hover:bg-(--grayBlume) cursor-pointer"
             >
               +
             </button>
@@ -95,7 +94,7 @@ export default function CartItem({ item }) {
 
         <button
           onClick={() => removeFromCart(item.id)}
-          className="text-(--pinkRose) hover:text-(--blackBean) text-2xl cursor-pointer"
+          className="text-(--orangeBlume) hover:text-(--blackBean) text-2xl cursor-pointer"
         >
           <FontAwesomeIcon icon={faTrash} />
         </button>

@@ -4,10 +4,10 @@ function ProductCard({ product }) {
   return (
     <Link
       to={`/product/${product.slug}`}
-      className="block border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+      className="block  rounded-lg overflow-hidden shadow hover:shadow-lg transition"
     >
       <img
-        src={product.image}
+        src={product.image_url}
         alt={product.title}
         className="w-full h-64 object-cover"
       />

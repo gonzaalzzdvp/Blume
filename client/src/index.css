@@ -1,12 +1,18 @@
 @import "tailwindcss";
 
-html {
+:root {
+  --pinkRose: #ed8080;
+  --pinkLight: #f8d1d1;
+  --citron: #8f9701;
+  --citronLight: #fcffbf;
+  --blackBean: #9c1642;
+  --orangeBlume: #ee7007;
+  --yellowBlume: #ffbc2a;
+  --blackBlume: #343434;
+  --grayBlume: #ead8c3;
+  --whiteBlume: #FEFFEF;
 }
 
-:root {
-  --pinkRose: #ed809d;
-  --citron: #c9c769;
-  --blackBean: #461312;
-  --blackBlume: #343434;
-  --whiteBlume: #FEFFEF;
+.inputShadow {
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
 }
