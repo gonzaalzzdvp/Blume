@@ -133,14 +133,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-""" CORS_ALLOWED_ORIGINS = [
-    "https://blume.vercel.app",
-] """
-
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://blume-care.onrender.com",
+]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://blume.vercel.app",
+    "https://blume-care.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

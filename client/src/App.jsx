@@ -17,8 +17,8 @@ import Dashboard from "./admin/pages/Dashboard";
 
 import ProductFormPage from "./admin/pages/Products/ProductFormPage";
 import ProductList from "./admin/pages/Products/ProductList";
-import CategoriesPage from "./admin/pages/categories/CategoriesPage";
-import CategoryFormPage from "./admin/pages/categories/CategoryFormPage";
+import CategoriesPage from "./admin/pages/Categories/CategoriesPage";
+import CategoryFormPage from "./admin/pages/Categories/CategoryFormPage";
 import OrderPage from "./admin/pages/Orders/OrdersPage";
 import OrderDetailPage from "./admin/pages/Orders/OrderDetailPage";
 
