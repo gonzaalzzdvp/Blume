@@ -1,4 +1,4 @@
-import "../../styles/slider.css";
+import "../../Styles/slider.css";
 
 export default function Slider({ showPromo }) {
   return (
@@ -8,7 +8,7 @@ export default function Slider({ showPromo }) {
       }`}
       style={{
         "--height": "24px",
-        "--width": "380px", // Ancho estimado para que el texto respire sin amontonarse
+        "--width": "380px", 
         "--quantity": "3",
       }}
     >

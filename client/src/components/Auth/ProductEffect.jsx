@@ -1,4 +1,4 @@
-import "../../Styles/ProductEffect.css";
+import "../../Styles/productEffect.css";
 
 export default function ProductEffect() {
   const columns = Array.from({ length: 5 });

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDebounce } from "use-debounce";
 
 import ProductTable from "../../components/Product/ProductTable";
-import SearchBar from "../../components/Common/SearchBar";
+import SearchBar from "../../components/Common/Searchbar";
 import ConfirmModal from "../../components/Common/ConfirmModal";
 import { getProducts, deleteProduct } from "../../services/adminProductService";
 
