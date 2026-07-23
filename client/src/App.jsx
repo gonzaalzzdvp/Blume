@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
-import ProductDetail from "./pages/ProductDetail";
+import ProductDetail from "./pages/Product/ProductDetail";
 import Catalog from "./components/Product/Catalog";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
@@ -10,6 +10,7 @@ import Checkout from "./pages/Cart/Checkout";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Auth/Profile";
+import OrderDetail from './pages/Orders/OrderDetail'
 import ThankYouPage from "./pages/ThankYouPage";
 
 import Dashboard from "./admin/pages/Dashboard";
@@ -63,6 +64,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <PrivateRoute>
+                <OrderDetail />
               </PrivateRoute>
             }
           />

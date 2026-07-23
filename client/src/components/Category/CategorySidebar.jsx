@@ -5,10 +5,7 @@ export default function CategorySidebar({
 }) {
   return (
     <aside className="w-64 pr-6">
-
-      <h2 className="text-xl font-semibold mb-4 ">
-        Categorías
-      </h2>
+      <h2 className="text-xl font-semibold mb-4 ">Categorías</h2>
 
       <button
         onClick={() => onSelectCategory(null)}
@@ -18,22 +15,32 @@ export default function CategorySidebar({
           text-left
           py-2
           cursor-pointer
+          ${selectedCategory === null ? "font-bold text-(--pinkRose)" : ""}
+        `}
+      >
+        🛍️ Todos
+      </button>
+
+      <button
+        onClick={() => onSelectCategory("featured")}
+        className={`
+          block
+          w-full
+          text-left
+          py-2
+          cursor-pointer
           ${
-            selectedCategory === null
-              ? "font-bold text-(--pinkRose)"
-              : ""
+            selectedCategory === "featured" ? "font-bold text-(--pinkRose)" : ""
           }
         `}
       >
-        Todos
+        ⭐ Destacados
       </button>
 
       {categories.map((category) => (
         <button
           key={category.id}
-          onClick={() =>
-            onSelectCategory(category.slug)
-          }
+          onClick={() => onSelectCategory(category.slug)}
           className={`
             block
             w-full
@@ -50,7 +57,6 @@ export default function CategorySidebar({
           {category.name}
         </button>
       ))}
-
     </aside>
   );
 }

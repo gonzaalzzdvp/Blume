@@ -3,7 +3,8 @@ from django.urls import path
 from .views import (
     ProductListView,
     ProductDetailView,
-    CategoryListView
+    CategoryListView,
+    FeaturedProductsView
 )
 
 urlpatterns = [
@@ -18,6 +19,12 @@ urlpatterns = [
         "",
         ProductListView.as_view(),
         name="products"
+    ),
+
+    path(
+        "featured/",
+        FeaturedProductsView.as_view(),
+        name="featured-products",
     ),
 
     path(

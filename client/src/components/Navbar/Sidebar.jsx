@@ -51,18 +51,6 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
     }
   };
 
-  async function handleLogout() {
-    try {
-      await logout();
-
-      setMenuOpen(false);
-
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   async function loadCategories() {
     try {
       const data = await getCategories();
@@ -190,14 +178,14 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
               </div>
               <div className="border-t border-(--grayBlume)">
                 {authenticated ? (
-                  <button
-                    onClick={handleLogout}
-                    className="hover:bg-(--grayBlume) h-14 w-full px-4 flex items-center gap-3 text-lg hover:text-(--blackBean) cursor-pointer"
+                  <Link
+                    to="/profile"
+                    className="h-14 px-4 flex items-center gap-3 text-lg hover:bg-(--grayBlume) hover:text-(--blackBean)"
                   >
                     <FontAwesomeIcon icon={faUser} className="text-xl" />
 
-                    <span>Cerrar sesión</span>
-                  </button>
+                    <span>Perfil</span>
+                  </Link>
                 ) : (
                   <Link
                     to="/login"

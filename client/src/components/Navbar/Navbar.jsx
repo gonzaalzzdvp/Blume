@@ -107,7 +107,7 @@ export default function Navbar() {
                     w-5
                     h-5
                     rounded-full
-                    bg-(--blackBean)
+                    bg-(--citron)
                     text-white
                     text-xs
                     flex

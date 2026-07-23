@@ -12,7 +12,7 @@ import {
 
 export default function Beneficios() {
   return (
-    <div className="bg-(--grayBlume) h-100 w-full py-20 px-10 flex flex-col justify-center items-center gap-20">
+    <div className="bg-(--citronLight) h-100 w-full py-20 px-10 flex flex-col justify-center items-center gap-20">
       <h3 className="text-4xl text-(--citron) uppercase">
         <span className="font-bold">Nos preocupamos por</span> la salud de tu
         cabello

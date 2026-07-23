@@ -31,11 +31,12 @@ class ProductListView(generics.ListAPIView):
             is_active=True
         )
 
-        category = self.request.GET.get(
-            "category"
-        )
+        category = self.request.query_params.get("category")
 
-        if category:
+        if category == "featured":
+            queryset = queryset.filter(featured=True)
+
+        elif category:
             queryset = queryset.filter(
                 category__slug=category
             )
@@ -55,3 +56,12 @@ class ProductDetailView(generics.RetrieveAPIView):
     )
 
     lookup_field = "slug"
+
+class FeaturedProductsView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.filter(
+            featured=True,
+            is_active=True,
+        ).order_by("-created_at")[:5]

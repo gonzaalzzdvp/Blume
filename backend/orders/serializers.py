@@ -91,6 +91,7 @@ class OrderSerializer(
         )
 
         order = Order.objects.create(
+            user=self.context["request"].user,
             **validated_data
         )
 
@@ -123,3 +124,52 @@ class OrderSerializer(
         order.save()
 
         return order
+
+class OrderListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = [
+            "id",
+            "order_number",
+            "total",
+            "status",
+            "created_at",
+        ]
+
+# orders/serializers.py
+
+class OrderItemDetailSerializer(
+    serializers.ModelSerializer
+):
+
+    product_title = serializers.CharField(
+        source="product.title",
+        read_only=True,
+    )
+
+    class Meta:
+        model = OrderItem
+
+        fields = [
+            "id",
+            "product_title",
+            "quantity",
+            "unit_price",
+            "subtotal",
+        ]
+
+class OrderDetailSerializer(
+    serializers.ModelSerializer
+):
+
+    items = OrderItemDetailSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+
+        model = Order
+
+        fields = "__all__"

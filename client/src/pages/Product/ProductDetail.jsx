@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { useCart } from "../context/CartContext";
-import { getProduct } from "../services/productService";
+import { useCart } from "../../context/CartContext";
+import { getProduct } from "../../services/productService";
 
-import Ingredients from "../components/Ingredients/Ingredients";
+import Ingredients from "../../components/Ingredients/Ingredients";
 
 function ProductDetail() {
   const { slug } = useParams();

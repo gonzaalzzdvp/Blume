@@ -1,4 +1,4 @@
-import Catalog from '../components/Product/Catalog'
+import Catalog from '../../components/Product/Catalog'
 
 export default function Catalog() {
   return (

@@ -1,10 +1,6 @@
 import api from "./api";
 
-export const getProducts = async (
-  search = "",
-  category = null
-) => {
-
+export const getProducts = async (search = "", category = null) => {
   const params = {};
 
   if (search) {
@@ -15,30 +11,26 @@ export const getProducts = async (
     params.category = category;
   }
 
-  const response = await api.get(
-    "/products/",
-    {
-      params,
-    }
-  );
+  const response = await api.get("/products/", {
+    params,
+  });
 
   return response.data;
 };
 
 export const getProduct = async (slug) => {
-
-  const response = await api.get(
-    `/products/${slug}/`
-  );
+  const response = await api.get(`/products/${slug}/`);
 
   return response.data;
 };
 
 export const getCategories = async () => {
-
-  const response = await api.get(
-    "/products/categories/"
-  );
+  const response = await api.get("/products/categories/");
 
   return response.data;
 };
+
+export async function getFeaturedProducts() {
+  const { data } = await api.get("/products/featured/");
+  return data;
+}
