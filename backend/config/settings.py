@@ -133,12 +133,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+FRONTEND_URL = os.getenv("FRONTEND_URL")
+
 CORS_ALLOWED_ORIGINS = [
-    "https://blume-care.onrender.com",
+    FRONTEND_URL,
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://blume-care.onrender.com",
+    FRONTEND_URL,
 ]
 
 CORS_ALLOW_CREDENTIALS = True

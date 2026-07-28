@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="h-10 w-[90%] flex justify-center items-center text-(--whiteBlume) text-sm border-t">
-        <p>Copyright © 2025, All Rights Reserved - Develop by GonzaalzzDVP</p>
+        <p>Copyright © 2025, All Rights Reserved - Developed by GonzaalzzDVP</p>
       </div>
     </div>
   );
