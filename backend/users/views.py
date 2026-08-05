@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from .serializers import RegisterSerializer, LoginSerializer
+from django.conf import settings
 
 
 class RegisterView(APIView):
@@ -53,19 +54,19 @@ class LoginView(APIView):
             key="access_token",
             value=access,
             httponly=True,
-            samesite = "None",
-            secure = True,
+            secure=settings.COOKIE_SECURE,
+            samesite=settings.COOKIE_SAMESITE,
             path="/",
-            max_age=60 * 15,
+            max_age=60 * 60 * 12,
         )
 
         response.set_cookie(
             key="refresh_token",
             value=str(refresh),
             httponly=True,
-            samesite = "None",
-            secure = True,
-            max_age=60 * 60 * 24 * 7,
+            samesite=settings.COOKIE_SAMESITE,
+            secure=settings.COOKIE_SECURE,
+            max_age=60 * 60 * 48,
         )
 
         return response
@@ -90,8 +91,17 @@ class LogoutView(APIView):
             "message": "Sesión cerrada."
         })
 
-        response.delete_cookie("access_token")
-        response.delete_cookie("refresh_token")
+        response.delete_cookie(
+            "access_token",
+            path="/",
+            samesite=settings.COOKIE_SAMESITE,
+        )
+
+        response.delete_cookie(
+            "refresh_token",
+            path="/",
+            samesite=settings.COOKIE_SAMESITE,
+        )
 
         return response
 
@@ -144,10 +154,10 @@ class RefreshView(APIView):
                 key="access_token",
                 value=access,
                 httponly=True,
-                samesite = "None",
-                secure = True,
+                samesite=settings.COOKIE_SAMESITE,
+                secure=settings.COOKIE_SECURE,
                 path="/",
-                max_age=60 * 15,
+                max_age=60 * 60 * 12,
             )
 
             return response

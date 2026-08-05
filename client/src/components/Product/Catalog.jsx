@@ -47,6 +47,7 @@ export default function Catalog() {
     try {
       const data = await getProducts(debouncedSearch, selectedCategory);
       setProducts(data);
+      console.log(data)
     } catch (error) {
       console.error(error);
     }

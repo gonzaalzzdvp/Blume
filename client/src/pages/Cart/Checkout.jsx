@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useCart } from "../../context/CartContext";
 import toast from "react-hot-toast";
 
-import { createOrder } from "../../services/orderService";
+import { createOrder, getOrderChoices } from "../../services/orderService";
 import { buildWhatsappMessage } from "../../utils/buildWhatsappMessage";
 import { SALES_PHONE } from "../../config/whatsapp";
 
 export default function Checkout() {
   const { cartItems, clearCart } = useCart();
   const navigate = useNavigate();
+
+  const [choices, setChoices] = useState({
+    payment_methods: [],
+    shipping_methods: [],
+    delivery_zones: [],
+    agencies: [],
+  });
 
   const [formData, setFormData] = useState({
     customer_name: "",
@@ -79,6 +86,19 @@ export default function Checkout() {
     0,
   );
 
+  useEffect(() => {
+    async function loadChoices() {
+      try {
+        const data = await getOrderChoices();
+        setChoices(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadChoices();
+  }, []);
+
   return (
     <main className="min-h-[calc(100vh-88px)] mt-22 max-w-6xl mx-auto p-6">
       <h1 className="text-4xl mb-8">Checkout</h1>
@@ -122,23 +142,13 @@ export default function Checkout() {
             onChange={handleChange}
             className="w-full border-b border-(--grayBlume) p-3 outline-none"
           >
-            <option value="">
-              Seleccione método de pago
-            </option>
+            <option value="">Seleccione método de pago</option>
 
-            <option value="usdt">USDT</option>
-
-            <option value="zelle">Zelle</option>
-
-            <option value="zinli">Zinli</option>
-
-            <option value="paypal">PayPal</option>
-
-            <option value="transfer">Transferencia</option>
-
-            <option value="pago_movil">Pago móvil</option>
-
-            <option value="cash">Efectivo</option>
+            {choices.payment_methods.map((method) => (
+              <option key={method.value} value={method.value}>
+                {method.label}
+              </option>
+            ))}
           </select>
 
           {/* Envío */}
@@ -149,11 +159,11 @@ export default function Checkout() {
             onChange={handleChange}
             className="w-full border-b border-(--grayBlume) p-3 outline-none"
           >
-            <option value="pickup">Pick-up</option>
-
-            <option value="delivery">Delivery Metro Caracas</option>
-
-            <option value="agency">MRW</option>
+            {choices.shipping_methods.map((method) => (
+              <option key={method.value} value={method.value}>
+                {method.label}
+              </option>
+            ))}
           </select>
 
           {formData.shipping_method === "delivery" && (
@@ -165,27 +175,27 @@ export default function Checkout() {
             >
               <option value="">Seleccione estación</option>
 
-              <option value="petare">Petare</option>
-
-              <option value="los_cortijos">Los Cortijos</option>
-
-              <option value="chacao">Chacao</option>
-
-              <option value="altamira">Altamira</option>
-
-              <option value="plaza_venezuela">Plaza Venezuela</option>
+              {choices.delivery_zones.map((zone) => (
+                <option key={zone.value} value={zone.value}>
+                  {zone.label}
+                </option>
+              ))}
             </select>
           )}
 
           {formData.shipping_method === "agency" && (
-            <input
-              type="text"
-              name="agency_address"
-              placeholder="Sucursal MRW"
-              value={formData.agency_address}
+            <select
+              name="agency_name"
+              value={formData.agency_name}
               onChange={handleChange}
-              className="w-full border p-3 rounded-xl"
-            />
+              className="w-full border-b border-(--grayBlume) p-3 outline-none"
+            >
+              {choices.agencies.map((agency) => (
+                <option key={agency.value} value={agency.value}>
+                  {agency.label}
+                </option>
+              ))}
+            </select>
           )}
 
           <button
@@ -221,7 +231,7 @@ export default function Checkout() {
             ))}
           </div>
 
-          <div className="my-6 border border-(--grayBlume)" ></div>
+          <div className="my-6 border border-(--grayBlume)"></div>
 
           <div className="flex justify-between text-xl font-semibold">
             <span>Total</span>

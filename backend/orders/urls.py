@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import OrderCreateView, MyOrdersView, MyOrderDetailView
+from .views import OrderCreateView, MyOrdersView, MyOrderDetailView, OrderChoicesView
 
 urlpatterns = [
 
@@ -20,5 +20,10 @@ urlpatterns = [
     path(
         "my/<int:pk>/",
         MyOrderDetailView.as_view(),
+    ),
+
+    path(
+        "choices/", 
+        OrderChoicesView.as_view(),
     ),
 ]
