@@ -30,6 +30,13 @@ function ProductDetail() {
     return <div className="p-8">Cargando producto...</div>;
   }
 
+  const allImages = [
+    product.image_url,
+    ...(product.images ?? [])
+      .map((img) => img.image)
+      .filter((img) => img !== product.image_url),
+  ];
+
   return (
     <main className="min-h-[calc(100vh-88px)] mt-22 p-6">
       <div className="max-w-7xl mx-auto">
@@ -38,25 +45,14 @@ function ProductDetail() {
           <div className="flex justify-center items-center gap-20">
             {/* Columna Izquierda: Miniaturas */}
             <div className="flex flex-col gap-3">
-              <img
-                src={product.image_url}
-                alt={product.title}
-                onClick={() => setSelectedImage(product.image_url)}
-                className={`w-20 h-20 object-cover rounded cursor-pointer border transition-colors ${
-                  selectedImage === product.image_url
-                    ? "border-(--blackBean)" // Borde si está seleccionada
-                    : "border-transparent hover:border-(--citron)" // Transparente por defecto, color en hover
-                }`}
-              />
-
-              {product.images.map((img) => (
+              {allImages.map((image, index) => (
                 <img
-                  key={img.id}
-                  src={img.image}
-                  alt={img.alt_text}
-                  onClick={() => setSelectedImage(img.image)}
+                  key={index}
+                  src={image}
+                  alt={product.title}
+                  onClick={() => setSelectedImage(image)}
                   className={`w-20 h-20 object-cover rounded cursor-pointer border transition-colors ${
-                    selectedImage === img.image
+                    selectedImage === image
                       ? "border-(--blackBean)"
                       : "border-transparent hover:border-(--citron)"
                   }`}

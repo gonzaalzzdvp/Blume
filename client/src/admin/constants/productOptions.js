@@ -4,7 +4,7 @@ export const SIZES = [
   "35 ml",
   "60 ml (2 oz)",
   "100 ml",
-  "250 ml (8.5 oz)",
+  "200 ml (8.5 oz)",
   "300 ml (10 oz)",
   "450 ml",
   "500 ml",
