@@ -2,9 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCategories } from "../../services/categoryService";
+import { useLoading } from "../../context/LoadingContext";
 
 export default function CatalogSection() {
   const [categories, setCategories] = useState([]);
+  const { completeTask } = useLoading();
 
   const categoryImages = {
     hidratacion: "/categories/hydrating.png",
@@ -23,6 +25,7 @@ export default function CatalogSection() {
       const data = await getCategories();
 
       setCategories(data);
+      completeTask("categories");
     } catch (error) {
       console.error(error);
     }
@@ -32,7 +35,7 @@ export default function CatalogSection() {
     <section className="h-[calc(100vh-88px)] w-full p-6 md:p-20 flex flex-col justify-center items-center">
       <div className="w-full text-center mb-8">
         <h2 className="text-(--blackBean) text-4xl uppercase">
-          <span className="font-bold">Comprar por</span> categoría
+          Comprar por <span className="font-clash-bold">categoría</span>
         </h2>
       </div>
       <div className="w-full flex flex-wrap justify-center items-center gap-4">
@@ -50,7 +53,7 @@ export default function CatalogSection() {
               />
             </div>
 
-            <p className="text-center font-medium">{category.name}</p>
+            <p className="text-center font-ranade-bold text-(--citron)">{category.name}</p>
           </Link>
         ))}
       </div>

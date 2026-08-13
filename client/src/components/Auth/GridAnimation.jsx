@@ -116,14 +116,14 @@ export default function GridAnimation() {
   }, []);
 
   return (
-    <div ref={gridRef} className="grid w-100 grid-cols-4 gap-3">
+    <div ref={gridRef} className="grid w-120 grid-cols-4 gap-3">
       {images.map((image, index) => (
         <img
           key={index}
           src={image}
           alt=""
           draggable={false}
-          className="grid-item h-25 w-15 rounded-2xl object-cover select-none"
+          className="grid-item h-26 w-16 rounded-2xl object-cover select-none"
         />
       ))}
     </div>

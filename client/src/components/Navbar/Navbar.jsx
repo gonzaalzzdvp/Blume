@@ -75,9 +75,7 @@ export default function Navbar() {
         </button>
 
         <Link to="/">
-          <h1 className="text-3xl text-(--blackBean) hover:text-(--pinkRose)">
-            Blume
-          </h1>
+          <img src="/Logo/BlumeLogo.png" alt="Blume Care Logo" className="h-14"/>
         </Link>
 
         <div className="flex justify-center items-center gap-10">

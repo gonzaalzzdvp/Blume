@@ -16,7 +16,7 @@ export default function Footer() {
           <h4 className="w-[70%] text-5xl">
             Somos tus aliados para que luzcas espectacular
           </h4>
-          <p className="w-[70%] text-xl">
+          <p className="w-[70%] text-xl font-ranade-regular">
             Contáctanos para agendar una cita y conocer más
           </p>
           <div className="w-[70%]">
@@ -28,45 +28,45 @@ export default function Footer() {
         <img src="/footer/footer.png" className="h-full" />
       </div>
       <div className="h-[30vh] mt-20 bg-(--blackBean) flex justify-center items-center gap-30 text-(--whiteBlume)">
-        <div className="h-60 flex flex-col gap-5">
+        <div className="h-60 flex flex-col gap-5 font-ranade-regular">
           <h4 className="text-lg">Contacto</h4>
           <ul className="text-sm">
             <li>
-                +58 41* *** ** **
+                +58 412 611 20 94
             </li>
             <li>
-                email@mail.com
+                blumecareve@gmail.com
             </li>
           </ul>
         </div>
-        <div className="h-60 flex flex-col gap-5">
+        <div className="h-60 flex flex-col gap-5 font-ranade-regular">
           <h4 className="text-lg">RRSS</h4>
           <ul className="text-sm">
             <li>
-              <Link to="/" className="hover:text-(--grayBlume)">
+              <Link to="/https://www.facebook.com" className="hover:text-(--pinkRose)">
                 Facebook
               </Link>
             </li>
             <li>
-              <Link to="/" className="hover:text-(--grayBlume)">
+              <Link to="https://www.instagram.com/blumecareve/" className="hover:text-(--pinkRose)">
                 Instagram
               </Link>
             </li>
             <li>
-              <Link to="/" className="hover:text-(--grayBlume)">
+              <Link to="/https://www.tiktok.com" className="hover:text-(--pinkRose)">
                 Tiktok
               </Link>
             </li>
           </ul>
         </div>
-        <div className="h-60 flex flex-col gap-5">
+        <div className="h-60 flex flex-col gap-5 font-ranade-regular">
           <h4 className="text-lg">Tienda</h4>
           <ul className="text-sm">
             {footerCategories.map((category) => (
               <li key={category.slug}>
                 <Link
                   to={`/catalog?category=${category.slug}`}
-                  className="hover:text-(--grayBlume)"
+                  className="hover:text-(--pinkRose)"
                 >
                   {category.name}
                 </Link>
@@ -74,29 +74,29 @@ export default function Footer() {
             ))}
           </ul>
         </div>
-        <div className="h-60 flex flex-col gap-5">
+        <div className="h-60 flex flex-col gap-5 font-ranade-regular">
           <h4 className="text-lg">Sobre nosotros</h4>
           <ul className="text-sm">
             <li>
-              <Link to="/" className="hover:text-(--grayBlume)">
+              <Link to="/" className="hover:text-(--pinkRose)">
                 Política de privacidad
               </Link>
             </li>
             <li>
-              <Link to="/" className="hover:text-(--grayBlume)">
+              <Link to="/" className="hover:text-(--pinkRose)">
                 Términos y condiciones
               </Link>
             </li>
             <li>
-              <Link to="/" className="hover:text-(--grayBlume)">
+              <Link to="/" className="hover:text-(--pinkRose)">
                 Pagos
               </Link>
             </li>
           </ul>
         </div>
       </div>
-      <div className="h-10 w-[90%] flex justify-center items-center text-(--whiteBlume) text-sm border-t">
-        <p>Copyright © 2025, All Rights Reserved - Developed by GonzaalzzDVP</p>
+      <div className="h-10 w-[90%] flex justify-center items-center text-(--whiteBlume) text-sm font-ranade-regular border-t">
+        <p>Copyright © 2025, All Rights Reserved - Develop by <span className="font-ranade-bold">GonzaalzzDVP</span></p>
       </div>
     </div>
   );

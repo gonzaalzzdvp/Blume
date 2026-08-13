@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
+import { useLoading } from "./LoadingContext";
 
 import * as authService from "../services/authService";
 
@@ -8,16 +16,13 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-
   const [authenticated, setAuthenticated] = useState(false);
-
   const [loading, setLoading] = useState(true);
+  const loadingContext = useLoading();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const { completeTask } = loadingContext;
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const data = await authService.me();
 
@@ -30,8 +35,13 @@ export function AuthProvider({ children }) {
       setAuthenticated(false);
     } finally {
       setLoading(false);
+      completeTask("auth");
     }
-  };
+  }, [completeTask]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const login = async (credentials) => {
     await authService.login(credentials);

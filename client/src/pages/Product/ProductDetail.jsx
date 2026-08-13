@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { useRef } from "react";
+import gsap from "gsap";
+
 import { useCart } from "../../context/CartContext";
 import { getProduct } from "../../services/productService";
 
 import Ingredients from "../../components/Ingredients/Ingredients";
 
-function ProductDetail() {
-  const { slug } = useParams();
+import ProductDetailSkeleton from "../../components/Skeletons/ProductDetailSkeleton";
+
+export default function ProductDetail() {
+  const contentRef = useRef(null);
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
+  const [showContent, setShowContent] = useState(false);
   const { addToCart } = useCart();
+  const { slug } = useParams();
 
   useEffect(() => {
     loadProduct();
@@ -19,15 +26,38 @@ function ProductDetail() {
   const loadProduct = async () => {
     try {
       const data = await getProduct(slug);
+
       setProduct(data);
       setSelectedImage(data.image_url);
+
+      requestAnimationFrame(() => {
+        setShowContent(true);
+      });
     } catch (error) {
       console.error(error);
     }
   };
 
+  useEffect(() => {
+    if (!showContent || !contentRef.current) return;
+
+    gsap.fromTo(
+      contentRef.current,
+      {
+        opacity: 0,
+        y: 12,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.35,
+        ease: "power2.out",
+      },
+    );
+  }, [showContent]);
+
   if (!product) {
-    return <div className="p-8">Cargando producto...</div>;
+    return <ProductDetailSkeleton />;
   }
 
   const allImages = [
@@ -38,7 +68,7 @@ function ProductDetail() {
   ];
 
   return (
-    <main className="min-h-[calc(100vh-88px)] mt-22 p-6">
+    <main ref={contentRef} className="min-h-[calc(100vh-88px)] mt-22 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-center items-center gap-20">
           {/* --- SECCIÓN DE IMÁGENES --- */}
@@ -74,7 +104,7 @@ function ProductDetail() {
           {/* --- SECCIÓN DE INFORMACIÓN --- */}
           <div className="w-112.5 flex flex-col">
             <div className="flex flex-col gap-1.5">
-              <h1 className="text-4xl font-bold">{product.title}</h1>
+              <h1 className="text-4xl font-clash-bold text-(--citron)">{product.title}</h1>
               <div
                 className={`w-20 p-1 flex justify-center items-center gap-1 rounded-2xl ${
                   product.stock > 0
@@ -98,8 +128,8 @@ function ProductDetail() {
             <p className="text-3xl font-bold mt-4">${product.price}</p>
 
             <div className="mt-4 mb-2 pb-2 border-b border-gray-300">
-              <h2 className="font-semibold text-xl ">Descripción</h2>
-              <p className="mt-2 text-gray-700">{product.description}</p>
+              <h2 className="text-xl font-ranade-bold">Descripción</h2>
+              <p className="mt-2 text-gray-700 font-ranade-regular">{product.description}</p>
             </div>
 
             <div className="text-sm space-y-1">
@@ -143,5 +173,3 @@ function ProductDetail() {
     </main>
   );
 }
-
-export default ProductDetail;

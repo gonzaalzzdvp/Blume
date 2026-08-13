@@ -1,7 +1,7 @@
 export default function Curly() {
   return (
     <section className="mt-12 pt-8 flex flex-col justify-center items-center gap-8 border-t border-(--grayBlume) ">
-      <h2 className="text-4xl text-(--blackBean) font-semibold mb-4 uppercase">
+      <h2 className="text-4xl text-(--blackBean) mb-4 uppercase font-clash-bold">
         Ingredientes clave
       </h2>
 
@@ -9,11 +9,11 @@ export default function Curly() {
         <div className="w-80 flex flex-col justify-between gap-4">
           <h3 className="font-light text-2xl text-(--citron) uppercase">
             Aceite de{" "}
-            <span className="text-2xl text-(--citron) font-bold uppercase">
+            <span className="text-2xl text-(--citron) uppercase font-clash-bold">
               Girasol
             </span>
           </h3>
-          <p className="h-30 w-full text-(--blackBlume)">
+          <p className="h-30 w-full text-(--blackBlume) font-ranade-regular">
             Protege el cabello de la pérdida de humedad a la vez que ofrece
             propiedades antiinflamatorias para hidratar y calmar el cuero
             cabelludo.
@@ -23,7 +23,7 @@ export default function Curly() {
         <div className="flex flex-col justify-between gap-4">
           <h3 className="font-light text-2xl text-(--citron) uppercase">
             Extracto de{" "}
-            <span className="text-2xl text-(--citron) font-bold uppercase">
+            <span className="text-2xl text-(--citron) font-bold uppercase font-clash-bold">
               Mango
             </span>
           </h3>
@@ -37,11 +37,11 @@ export default function Curly() {
         <div className="w-80 flex flex-col justify-between gap-4">
           <h3 className="font-light text-2xl text-(--citron) uppercase">
             Aceite de semilla de{" "}
-            <span className="text-2xl text-(--citron) font-bold uppercase">
+            <span className="text-2xl text-(--citron) font-bold uppercase font-clash-bold">
               Granada
             </span>
           </h3>
-          <p className="h-30 w-full text-(--blackBlume)">
+          <p className="h-30 w-full text-(--blackBlume) font-ranade-regular">
             Protege el cabello de los factores ambientales adversos, a la vez
             que protege el cuero cabelludo y previene el envejecimiento
             prematuro.

@@ -1,18 +1,84 @@
 @import "tailwindcss";
 
+/* 1. Declarar las fuentes primero con el formato 'opentype' para .otf */
+@font-face {
+  font-family: 'ClashDisplay-Bold';
+  src: url('./assets/ClashDisplay/ClashDisplay-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ClashDisplay-Light';
+  src: url('./assets/ClashDisplay/ClashDisplay-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ranade-Bold';
+  src: url('./assets/Ranade/Ranade-Medium.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ranade-Regular';
+  src: url('./assets/Ranade/Ranade-Thin.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HomemadeApple-Regular';
+  src: url('./assets/HomemadeApple-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2. Integración nativa con Tailwind CSS v4 (@theme) */
+@theme {
+  --font-clash-bold: 'ClashDisplay-Bold', system-ui, -apple-system, sans-serif;
+  --font-clash-light: 'ClashDisplay-Light', system-ui, -apple-system, sans-serif;
+  --font-ranade-regular: 'Ranade-Regular', system-ui, -apple-system, sans-serif;
+  --font-ranade-bold: 'Ranade-Bold', system-ui, -apple-system, sans-serif;
+  --font-homemade-apple: 'HomemadeApple-Regular', system-ui, -apple-system, sans-serif;
+}
+
+/* 3. Variables globales tradicionales */
 :root {
-  --pinkRose: #ed8080;
+  --clashBold: 'ClashDisplay-Bold', system-ui, -apple-system, sans-serif;
+  --clashLight: 'ClashDisplay-Light', system-ui, -apple-system, sans-serif;
+  --ranadeRegular: 'Ranade-Regular', system-ui, -apple-system, sans-serif;
+  --ranadeBold: 'Ranade-Bold', system-ui, -apple-system, sans-serif;
+
+  --pinkRose: #ffa4a4;
   --pinkLight: #f8d1d1;
-  --citron: #8f9701;
+  --citron: #a0a004;
   --citronLight: #fcffbf;
-  --blackBean: #9c1642;
-  --orangeBlume: #ee7007;
+  --blackBean: #930329;
+  --orangeBlume: #ed660a;
   --yellowBlume: #ffbc2a;
   --blackBlume: #343434;
   --grayBlume: #ead8c3;
-  --whiteBlume: #FEFFEF;
+  --whiteBlume: #f2f2f2;
+}
+
+html {
+  font-family: var(--clashLight);
 }
 
 .inputShadow {
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }

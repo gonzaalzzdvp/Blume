@@ -96,9 +96,7 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
             {/* Header */}
             <div className="h-16 px-4 flex justify-between items-center ">
               <Link to="/">
-                <h2 className="text-xl text-(--blackBean) hover:text-(--pinkRose)">
-                  Blume
-                </h2>
+                <img src="/Logo/BlumeLogo2.png" alt="Blume Logo" className="h-10" />
               </Link>
               <button
                 onClick={() => {
