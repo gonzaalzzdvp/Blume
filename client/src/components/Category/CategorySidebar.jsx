@@ -5,7 +5,7 @@ export default function CategorySidebar({
 }) {
   return (
     <aside className="w-64 pr-6">
-      <h2 className="text-xl font-semibold mb-4 ">Categorías</h2>
+      <h2 className="text-xl font-clash-display mb-4 ">Categorías</h2>
 
       <button
         onClick={() => onSelectCategory(null)}
@@ -15,7 +15,7 @@ export default function CategorySidebar({
           text-left
           py-2
           cursor-pointer
-          ${selectedCategory === null ? "font-bold text-(--pinkRose)" : ""}
+          ${selectedCategory === null ? "font-ranade-regular text-(--pinkRose)" : ""}
         `}
       >
         🛍️ Todos
@@ -30,7 +30,7 @@ export default function CategorySidebar({
           py-2
           cursor-pointer
           ${
-            selectedCategory === "featured" ? "font-bold text-(--pinkRose)" : ""
+            selectedCategory === "featured" ? "font-ranade-bold text-(--pinkRose)" : ""
           }
         `}
       >
@@ -47,14 +47,15 @@ export default function CategorySidebar({
             text-left
             py-2
             cursor-pointer
+            font-ranade-regular
             ${
               selectedCategory === category.slug
-                ? "font-bold text-(--pinkRose)"
+                ? "font-ranade-bold text-(--pinkRose)"
                 : ""
             }
           `}
         >
-          {category.name}
+          🌻{" "}{category.name}
         </button>
       ))}
     </aside>

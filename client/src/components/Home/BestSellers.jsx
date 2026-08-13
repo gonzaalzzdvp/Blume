@@ -21,8 +21,8 @@ export default function BestSellers() {
 
   return (
     <div className="h-[calc(100vh-88px)] w-full flex flex-col justify-center items-center gap-10">
-      <h2 className="text-(--orangeBlume) text-4xl uppercase font-bold">
-        Nuestros Blumies <span className="font-light">Más vendidos</span>
+      <h2 className="text-(--orangeBlume) text-4xl uppercase">
+        Nuestros Blumies <span className=" font-clash-bold">Más vendidos</span>
       </h2>
       <ul className="flex flex-wrap justify-center gap-8">
         {products.map((product) => (

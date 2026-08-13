@@ -1,16 +1,22 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-import { useCart } from "../../context/CartContext";
 
 import CartItem from "../../components/Cart/CartItem";
 import CartSummary from "../../components/Cart/CartSummary";
 import EmptyCart from "../../components/Cart/EmptyCart";
+import CartSkeleton from "../../components/Skeletons/CartSkeleton";
+
+import { useCart } from "../../context/CartContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 
 export default function CartPage() {
-  const { cartItems } = useCart();
+  const { cartItems, loading } = useCart();
+
+  if (loading) {
+    return <CartSkeleton />;
+  }
 
   return (
     <main className="mt-24 min-h-[calc(100vh-88px)] max-w-6xl mx-auto p-6">
@@ -33,7 +39,7 @@ export default function CartPage() {
 
           <CartSummary checkoutMode={false} />
         </div>
-      )}      
+      )}
     </main>
   );
 }

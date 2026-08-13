@@ -13,15 +13,15 @@ function ProductCard({ product }) {
       />
 
       <div className="p-4">
-        <h3 className="font-semibold text-lg">
+        <h3 className="font-clash-display text-lg">
           {product.title}
         </h3>
 
-        <p className="text-gray-600">
+        <p className="text-gray-600 font-ranade-regular">
           {product.category_name}
         </p>
 
-        <p className="font-bold mt-2">
+        <p className="font-bold mt-2 font-ranade-regular">
           ${product.price}
         </p>
       </div>

@@ -6,8 +6,8 @@ export default function ContactSection() {
 
   return (
     <section className="h-[calc(100vh-88px)] w-full my-10 flex flex-col justify-center items-center gap-10">
-      <h3 className="text-(--pinkRose) text-4xl uppercase font-bold">
-        Comunícate con <span className="font-light">Nosotros</span>
+      <h3 className="text-(--pinkRose) text-4xl uppercase">
+        Comunícate <span className="font-clash-bold">con nosotros</span>
       </h3>
 
       <form

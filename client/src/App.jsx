@@ -1,5 +1,9 @@
+import { useEffect } from "react";
+import { useLoading } from "./context/LoadingContext";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import SplashScreen from "./components/SplashScreen/SplashScreen";
 import HomePage from "./pages/HomePage";
 import ProductDetail from "./pages/Product/ProductDetail";
 import Catalog from "./components/Product/Catalog";
@@ -10,7 +14,7 @@ import Checkout from "./pages/Cart/Checkout";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Auth/Profile";
-import OrderDetail from './pages/Orders/OrderDetail'
+import OrderDetail from "./pages/Orders/OrderDetail";
 import ThankYouPage from "./pages/ThankYouPage";
 
 import Dashboard from "./admin/pages/Dashboard";
@@ -33,9 +37,22 @@ import AdminRoute from "./routes/AdminRoute";
 import ScrollToTop from "./helper/ScrollToTop";
 
 function App() {
+  const { completeTask } = useLoading();
+
+  useEffect(() => {
+    completeTask("app");
+  }, []);
+
+  useEffect(() => {
+    document.fonts.ready.then(() => {
+      completeTask("fonts");
+    });
+  }, []);
+
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <SplashScreen />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />

@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 
 import { useAuth } from "./AuthContext";
 
@@ -21,40 +27,41 @@ export function CartProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const { authenticated } = useAuth();
 
-  const loadCart = async () => {
+  const loadCart = useCallback(async () => {
     try {
       const data = await getCart();
 
       setCartItems(data.items);
-
       setCartTotal(Number(data.total));
-
       setCartCount(data.total_items);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (authenticated) {
+      setLoading(true);
       loadCart();
     } else {
       resetCart();
       setLoading(false);
     }
-  }, [authenticated]);
+  }, [authenticated, loadCart]);
+
+  const syncCart = (data) => {
+    setCartItems(data.items);
+    setCartTotal(Number(data.total));
+    setCartCount(data.total_items);
+  };
 
   const addToCart = async (product, quantity = 1) => {
     try {
       const data = await addCartItem(product.id, quantity);
 
-      setCartItems(data.items);
-
-      setCartTotal(Number(data.total));
-
-      setCartCount(data.total_items);
+      syncCart(data);
 
       toast.success(`${product.title} agregado al carrito`);
     } catch (error) {
@@ -68,11 +75,7 @@ export function CartProvider({ children }) {
     try {
       const data = await removeCartItem(cartItemId);
 
-      setCartItems(data.items);
-
-      setCartTotal(Number(data.total));
-
-      setCartCount(data.total_items);
+      syncCart(data);
 
       toast.success("Producto eliminado");
     } catch (error) {
@@ -84,11 +87,7 @@ export function CartProvider({ children }) {
     try {
       const data = await updateCartItem(cartItemId, quantity);
 
-      setCartItems(data.items);
-
-      setCartTotal(Number(data.total));
-
-      setCartCount(data.total_items);
+      syncCart(data);
     } catch (error) {
       toast.error(
         error.response?.data?.detail || "No fue posible actualizar el carrito.",
@@ -121,11 +120,7 @@ export function CartProvider({ children }) {
     try {
       const data = await clearCartService();
 
-      setCartItems(data.items);
-
-      setCartTotal(Number(data.total));
-
-      setCartCount(data.total_items);
+      syncCart(data);
 
       toast.success("Carrito vaciado");
     } catch (error) {
