@@ -1,23 +1,21 @@
 import ProductRow from "./ProductRow";
 
-export default function ProductTable({
-  products,
-  onDelete,
-}) {
+export default function ProductTable({ products, onDelete }) {
   return (
     <div
       className="
         bg-white
-        mx-5
+        mx-0 sm:mx-5
         rounded-xl
         shadow
         overflow-hidden
       "
     >
-      {/* Encabezado */}
+      {/* HEADER - TABLET / DESKTOP */}
       <div
         className="
-          grid
+          hidden
+          lg:grid
           grid-cols-[90px_2fr_1.5fr_120px_100px_110px_120px]
           gap-4
           px-6
@@ -36,16 +34,12 @@ export default function ProductTable({
       </div>
 
       {products.length === 0 ? (
-        <div className="p-10 text-center text-gray-500">
+        <div className="p-8 sm:p-10 text-center text-gray-500">
           No hay productos.
         </div>
       ) : (
         products.map((product) => (
-          <ProductRow
-            key={product.id}
-            product={product}
-            onDelete={onDelete}
-          />
+          <ProductRow key={product.id} product={product} onDelete={onDelete} />
         ))
       )}
     </div>

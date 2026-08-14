@@ -78,14 +78,14 @@ export default function Navbar() {
           <img src="/Logo/BlumeLogo.png" alt="Blume Care Logo" className="h-10 md:h-12 lg:h-14"/>
         </Link>
 
-        <div className="flex justify-center items-center gap-10">
+        <div className="flex justify-center items-center gap-4 md:gap-10">
           {user?.role === "admin" && (
             <Link
               to="/admin"
               className="flex flex-col justify-center items-center gap-1 text-(--blackBean) hover:text-(--pinkRose)"
             >
               <FontAwesomeIcon icon={faGears} className=" text-xl" />
-              <span className="text-sm">Admin Panel</span>
+              <span className="hidden md:flex text-sm">Admin Panel</span>
             </Link>
           )}
 

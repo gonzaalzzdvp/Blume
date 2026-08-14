@@ -64,14 +64,29 @@ export default function ProductList() {
 
   return (
     <div className="w-full">
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold">Productos</h1>
+      {/* HEADER */}
+      <div className="mb-6 sm:mb-10">
+        <h1 className="text-2xl sm:text-3xl font-bold">Productos</h1>
 
-        <p className="text-gray-500">Administra el catálogo de la tienda.</p>
+        <p className="mt-1 text-sm sm:text-base text-gray-500">
+          Administra el catálogo de la tienda.
+        </p>
       </div>
 
-      <div className="pb-10 flex justify-between items-center gap-6">
-        <div className="ml-5 flex-1">
+      {/* SEARCH + NEW PRODUCT */}
+      <div
+        className="
+          pb-6 sm:pb-10
+          px-0 sm:px-5
+          flex
+          flex-col
+          sm:flex-row
+          sm:justify-between
+          sm:items-center
+          gap-4
+        "
+      >
+        <div className="w-full sm:flex-1">
           <SearchBar
             value={search}
             onChange={setSearch}
@@ -82,14 +97,19 @@ export default function ProductList() {
         <Link
           to="/admin/products/new"
           className="
+            w-full
+            sm:w-auto
+            flex
+            justify-center
+            items-center
             bg-(--pinkRose)
             text-white
-            mr-5
-            px-6
+            px-5
             py-3
             rounded-xl
             hover:opacity-90
             cursor-pointer
+            whitespace-nowrap
           "
         >
           + Nuevo producto
@@ -97,6 +117,7 @@ export default function ProductList() {
       </div>
 
       <ProductTable products={products} onDelete={handleDelete} />
+
       <ConfirmModal
         open={showDeleteModal}
         title="Eliminar producto"

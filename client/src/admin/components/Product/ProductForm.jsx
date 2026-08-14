@@ -12,7 +12,7 @@ export default function ProductForm({
 
   existingImages,
   setExistingImages,
-  
+
   newImages,
   setNewImages,
 
@@ -49,16 +49,26 @@ export default function ProductForm({
 
   return (
     <form
-      className="grid lg:grid-cols-3 gap-8"
+      className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8"
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* INFORMACIÓN GENERAL */}
 
-      <div className="bg-white lg:col-span-2 space-y-8 rounded-2xl shadow p-8">
+      <div
+        className="
+          bg-white
+          lg:col-span-2
+          space-y-8
+          rounded-2xl
+          shadow
+          p-5
+          sm:p-8
+        "
+      >
         <h2 className="text-xl font-semibold mb-6">Información General</h2>
 
         <div className="space-y-6">
-          <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
             <label className="block mb-2 font-medium">Nombre</label>
 
             <input
@@ -227,7 +237,17 @@ export default function ProductForm({
       </div>
 
       {/* IMAGENES */}
-      <div className="bg-white col-start-1 col-end-3 space-y-8 rounded-2xl shadow p-8">
+      <div
+        className="
+          bg-white
+          lg:col-span-2
+          space-y-8
+          rounded-2xl
+          shadow
+          p-5
+          sm:p-8
+        "
+      >
         <ImageUploader
           existingImages={existingImages}
           setExistingImages={setExistingImages}
@@ -242,12 +262,24 @@ export default function ProductForm({
 
       {/* BOTONES */}
 
-      <div className="flex justify-end items-center gap-4">
+      <div
+        className="
+          flex
+          flex-col-reverse
+          sm:flex-row
+          justify-end
+          items-stretch
+          sm:items-center
+          gap-3
+          lg:col-span-3
+        "
+      >
         <button
           type="button"
           onClick={onCancel}
           className="
-            h-20
+            w-full
+            sm:w-auto
             px-6
             py-3
             rounded-xl
@@ -261,8 +293,9 @@ export default function ProductForm({
         <button
           disabled={loading}
           className="
+            w-full
+            sm:w-auto
             bg-(--pinkRose)
-            h-20
             px-8
             py-3
             text-white
