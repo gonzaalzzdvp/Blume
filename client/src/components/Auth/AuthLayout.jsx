@@ -4,17 +4,17 @@ export default function AuthLayout({
   children,
 }) {
   return (
-    <main className="min-h-screen flex bg-white px-6">
+    <main className=" flex items-center bg-white px-6">
       <div className="w-full p-8">
         <div className="mb-8 ">
-          <h1 className="text-4xl text-(--blackBean)">
+          <h1 className="text-4xl text-(--blackBean) font-clash-bold">
             Blume
           </h1>
-          <h2 className="mt-6 text-2xl font-semibold">
+          <h2 className="mt-6 text-2xl font-clash-light">
             {title}
           </h2>
           {subtitle && (
-            <p className="mt-2 text-gray-500">
+            <p className="mt-2 text-gray-500 font-ranade-regular">
               {subtitle}
             </p>
           )}

@@ -21,7 +21,7 @@ export default function CartPage() {
   return (
     <main className="mt-24 min-h-[calc(100vh-88px)] max-w-6xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-8">
-        <h1 className="text-4xl">Carrito</h1>
+        <h1 className="text-4xl text-(--citron) font-clash-bold">Carrito</h1>
 
         <FontAwesomeIcon
           icon={faBagShopping}

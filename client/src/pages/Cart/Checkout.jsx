@@ -101,12 +101,12 @@ export default function Checkout() {
 
   return (
     <main className="min-h-[calc(100vh-88px)] mt-22 max-w-6xl mx-auto p-6">
-      <h1 className="text-4xl mb-8">Checkout</h1>
+      <h1 className="text-4xl mb-8 font-clash-light">Checkout</h1>
 
       <div className="grid lg:grid-cols-2 gap-10">
         {/* FORMULARIO */}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5 font-ranade-regular">
           <input
             type="text"
             name="customer_name"
@@ -216,8 +216,8 @@ export default function Checkout() {
 
         {/* RESUMEN */}
 
-        <div className="p-6 border border-(--grayBlume) rounded-2xl shadow-md">
-          <h2 className="text-2xl mb-6">Resumen</h2>
+        <div className="p-6 border border-(--grayBlume) rounded-2xl shadow-md font-ranade-regular">
+          <h2 className="text-2xl mb-6 font-clash-light">Resumen</h2>
 
           <div className="space-y-4">
             {cartItems.map((item) => (
@@ -233,7 +233,7 @@ export default function Checkout() {
 
           <div className="my-6 border border-(--grayBlume)"></div>
 
-          <div className="flex justify-between text-xl font-semibold">
+          <div className="flex justify-between text-xl font-ranade-bold">
             <span>Total</span>
 
             <span>${total.toFixed(2)}</span>

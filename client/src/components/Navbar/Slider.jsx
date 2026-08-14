@@ -12,7 +12,7 @@ export default function Slider({ showPromo }) {
         "--quantity": "3",
       }}
     >
-      <div className="list">
+      <div className="list font-ranade-italic">
         <div className="item text-sm italic" style={{ "--position": 1 }}>
           Florecer es un proceso 🌷
         </div>

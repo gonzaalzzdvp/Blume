@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-
-import { useRef } from "react";
 import gsap from "gsap";
 
 import { useCart } from "../../context/CartContext";
 import { getProduct } from "../../services/productService";
 
 import Ingredients from "../../components/Ingredients/Ingredients";
-
 import ProductDetailSkeleton from "../../components/Skeletons/ProductDetailSkeleton";
 
 export default function ProductDetail() {
@@ -52,7 +49,7 @@ export default function ProductDetail() {
         y: 0,
         duration: 0.35,
         ease: "power2.out",
-      },
+      }
     );
   }, [showContent]);
 
@@ -68,20 +65,23 @@ export default function ProductDetail() {
   ];
 
   return (
-    <main ref={contentRef} className="min-h-[calc(100vh-88px)] mt-22 p-6">
+    <main ref={contentRef} className="min-h-[calc(100vh-88px)] mt-16 md:mt-22 px-4 sm:px-6 py-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-center items-center gap-20">
+        {/* Contenedor principal responsive: flex-col en móvil, flex-row en escritorio */}
+        <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 md:gap-12 lg:gap-20">
+          
           {/* --- SECCIÓN DE IMÁGENES --- */}
-          <div className="flex justify-center items-center gap-20">
-            {/* Columna Izquierda: Miniaturas */}
-            <div className="flex flex-col gap-3">
+          <div className="w-full lg:w-auto flex flex-col-reverse md:flex-row justify-center items-center gap-4 md:gap-6 lg:gap-8">
+            
+            {/* Miniaturas: Horizontal con scroll en móvil, Vertical en md/lg */}
+            <div className="w-full md:w-auto flex md:flex-col gap-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-none justify-start md:justify-center">
               {allImages.map((image, index) => (
                 <img
                   key={index}
                   src={image}
                   alt={product.title}
                   onClick={() => setSelectedImage(image)}
-                  className={`w-20 h-20 object-cover rounded cursor-pointer border transition-colors ${
+                  className={`w-16 h-16 sm:w-20 sm:h-20 object-cover rounded cursor-pointer border flex-shrink-0 transition-colors ${
                     selectedImage === image
                       ? "border-(--blackBean)"
                       : "border-transparent hover:border-(--citron)"
@@ -91,84 +91,99 @@ export default function ProductDetail() {
             </div>
 
             {/* Imagen Principal Seleccionada */}
-            <div className="w-80">
+            <div className="w-full max-w-sm md:w-80 flex justify-center">
               <img
                 src={selectedImage}
                 alt={product.title}
-                // Borde eliminado como solicitaste
-                className="h-80 w-80 object-cover rounded-lg"
+                className="w-full aspect-square md:w-80 md:h-80 object-cover rounded-lg"
               />
             </div>
           </div>
 
           {/* --- SECCIÓN DE INFORMACIÓN --- */}
-          <div className="w-112.5 flex flex-col">
+          <div className="w-full lg:w-[450px] xl:w-[480px] flex flex-col">
             <div className="flex flex-col gap-1.5">
-              <h1 className="text-4xl font-clash-bold text-(--citron)">{product.title}</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-clash-bold text-(--citron)">
+                {product.title}
+              </h1>
+              
               <div
-                className={`w-20 p-1 flex justify-center items-center gap-1 rounded-2xl ${
+                className={`w-fit px-2.5 py-1 flex items-center gap-1.5 rounded-2xl ${
                   product.stock > 0
-                    ? "bg-green-100 text-green-800 "
-                    : "bg-red-300 text-red-800 p-1 rounded-2xl"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-300 text-red-800"
                 }`}
               >
                 <span
-                  className={`w-2 h-2  rounded-2xl ${
+                  className={`w-2 h-2 rounded-full ${
                     product.stock > 0 ? "bg-green-800" : "bg-red-800"
                   }`}
                 ></span>
-                <p className="text-[12px] flex items-center justify-center ">
-                  {" "}
+                <p className="text-[12px] font-medium">
                   {product.stock > 0 ? "Disponible" : "Agotado"}
                 </p>
               </div>
             </div>
-            <p className="text-gray-500 mt-2">{product.category_name}</p>
 
-            <p className="text-3xl font-bold mt-4">${product.price}</p>
+            <p className="text-gray-500 mt-2 text-sm sm:text-base">
+              {product.category_name}
+            </p>
+
+            <p className="text-2xl sm:text-3xl font-bold mt-3 sm:mt-4">
+              ${product.price}
+            </p>
 
             <div className="mt-4 mb-2 pb-2 border-b border-gray-300">
-              <h2 className="text-xl font-ranade-bold">Descripción</h2>
-              <p className="mt-2 text-gray-700 font-ranade-regular">{product.description}</p>
-            </div>
-
-            <div className="text-sm space-y-1">
-              <p>
-                <strong>Marca:</strong> {product.brand}
-              </p>
-              <p>
-                <strong>Tipo de cabello:</strong> {product.hair_type}
-              </p>
-              <p>
-                <strong>Beneficio:</strong> {product.benefit}
-              </p>
-              <p>
-                <strong>Tamaño:</strong> {product.size}
+              <h2 className="text-lg sm:text-xl font-ranade-bold">Descripción</h2>
+              <p className="mt-2 text-gray-700 text-sm sm:text-base font-ranade-regular leading-relaxed">
+                {product.description}
               </p>
             </div>
 
-            <div className="py-2">
+            <div className="text-xs sm:text-sm space-y-1.5 text-gray-800 font-ranade-regular">
+              <p>
+                <strong className="font-ranade-bold text-(--orangeBlume)">Marca:</strong> {product.brand}
+              </p>
+              <p>
+                <strong className="font-ranade-bold text-(--orangeBlume)">Tipo de cabello:</strong> {product.hair_type}
+              </p>
+              <p>
+                <strong className="font-ranade-bold text-(--orangeBlume)">Beneficio:</strong> {product.benefit}
+              </p>
+              <p>
+                <strong className="font-ranade-bold text-(--orangeBlume)">Tamaño:</strong> {product.size}
+              </p>
+            </div>
+
+            <div className="py-4 mt-2">
               <button
                 onClick={() => addToCart(product)}
+                disabled={product.stock <= 0}
                 className="
-                w-full
-                bg-(--pinkRose)
-                text-white
-                px-6
-                py-3
-                rounded-lg
-                font-semibold
-                cursor-pointer
-                transition-colors
-                hover:bg-(--citron)
-              "
+                  w-full
+                  bg-(--pinkRose)
+                  disabled:bg-gray-300
+                  disabled:cursor-not-allowed
+                  text-white
+                  px-6
+                  py-3
+                  rounded-lg
+                  font-semibold
+                  cursor-pointer
+                  transition-colors
+                  hover:bg-(--citron)
+                "
               >
-                Agregar al carrito
+                {product.stock > 0 ? "Agregar al carrito" : "Agotado"}
               </button>
             </div>
           </div>
         </div>
-        <Ingredients categorySlug={product.category_slug} />
+
+        {/* Sección de ingredientes */}
+        <div className="mt-12 sm:mt-16">
+          <Ingredients categorySlug={product.category_slug} />
+        </div>
       </div>
     </main>
   );

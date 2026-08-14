@@ -7,46 +7,66 @@ export default function ThankYouPage() {
   return (
     <main
       className="
-        min-h-screen
+        min-h-[calc(100vh-80px)]
         flex
         items-center
         justify-center
-        px-6
+        px-4
+        sm:px-6
+        py-12
       "
     >
       <div
         className="
+          w-full
           max-w-xl
           text-center
+          bg-white
+          p-6
+          sm:p-8
+          rounded-2xl
         "
       >
         <h1
           className="
-            text-5xl
-            font-semibold
+            text-3xl
+            sm:text-4xl
+            md:text-5xl
+            font-clash-bold
             text-(--citron)
-            mb-6
+            mb-3
+            sm:mb-6
+            leading-tight
           "
         >
           ¡Gracias por tu pedido!
         </h1>
+
         {orderNumber && (
           <p
             className="
-            mb-8
-            text-(--pinkRose)
-            font-semibold
+              mb-6
+              sm:mb-8
+              text-base
+              sm:text-lg
+              text-(--pinkRose)
+              font-semibold
             "
           >
-            Número de pedido: {orderNumber}
+            Número de pedido: <span className="font-bold">{orderNumber}</span>
           </p>
         )}
 
         <p
           className="
-            text-lg
+            text-sm
+            sm:text-base
+            md:text-lg
             text-gray-600
-            mb-8
+            mb-6
+            sm:mb-8
+            font-ranade-regular
+            leading-relaxed
           "
         >
           Hemos recibido tu solicitud correctamente. Serás redirigido a WhatsApp
@@ -59,13 +79,22 @@ export default function ThankYouPage() {
             inline-flex
             items-center
             justify-center
-            px-8
-            py-4
+            w-full
+            sm:w-auto
+            px-6
+            sm:px-8
+            py-3.5
+            sm:py-4
             rounded-xl
             bg-(--pinkRose)
             text-white
             hover:bg-(--orangeBlume)
-            transition
+            font-medium
+            text-base
+            sm:text-lg
+            transition-colors
+            duration-200
+            shadow-sm
           "
         >
           Seguir comprando

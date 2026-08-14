@@ -75,7 +75,7 @@ export default function Navbar() {
         </button>
 
         <Link to="/">
-          <img src="/Logo/BlumeLogo.png" alt="Blume Care Logo" className="h-14"/>
+          <img src="/Logo/BlumeLogo.png" alt="Blume Care Logo" className="h-10 md:h-12 lg:h-14"/>
         </Link>
 
         <div className="flex justify-center items-center gap-10">

@@ -43,7 +43,7 @@ export default function RegisterForm() {
           {...register("first_name", {
             required: true,
           })}
-          className="w-full p-3 rounded-lg inputShadow"
+          className="w-full p-3 rounded-lg inputShadow font-ranade-regular"
         />
 
         <input
@@ -51,7 +51,7 @@ export default function RegisterForm() {
           {...register("last_name", {
             required: true,
           })}
-          className="w-full p-3 rounded-lg inputShadow"
+          className="w-full p-3 rounded-lg inputShadow font-ranade-regular"
         />
       </div>
 
@@ -61,7 +61,7 @@ export default function RegisterForm() {
         {...register("email", {
           required: true,
         })}
-        className="w-full p-3 rounded-lg inputShadow"
+        className="w-full p-3 rounded-lg inputShadow font-ranade-regular"
       />
 
       <input
@@ -71,7 +71,7 @@ export default function RegisterForm() {
           required: true,
           minLength: 8,
         })}
-        className="w-full p-3 rounded-lg inputShadow"
+        className="w-full p-3 rounded-lg inputShadow font-ranade-regular"
       />
 
       <input
@@ -81,7 +81,7 @@ export default function RegisterForm() {
           validate: (value) =>
             value === watch("password") || "Las contraseñas no coinciden.",
         })}
-        className="w-full p-3 rounded-lg inputShadow"
+        className="w-full p-3 rounded-lg inputShadow font-ranade-regular"
       />
 
       {errors.confirm_password && (
@@ -99,14 +99,15 @@ export default function RegisterForm() {
           py-3
           rounded-lg
           cursor-pointer
+          font-ranade-regular
         "
       >
         Crear cuenta
       </button>
 
-      <p className="text-center">
+      <p className="text-center font-ranade-regular">
         ¿Ya tienes cuenta?
-        <Link to="/login" className="ml-2 text-(--pinkRose) hover:underline">
+        <Link to="/login" className="ml-2 text-(--pinkRose) hover:underline font-ranade-bold">
           Iniciar sesión
         </Link>
       </p>
