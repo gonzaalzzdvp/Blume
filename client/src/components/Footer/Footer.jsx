@@ -152,7 +152,7 @@ export default function Footer() {
       {/* Copyright */}
       <div className="py-6 lg:py-0 lg:h-10 w-[90%] flex justify-center items-center text-(--whiteBlume) text-xs sm:text-sm font-ranade-regular border-t border-white/20 text-center">
         <p>
-          Copyright © 2025, All Rights Reserved - Develop by{" "}
+          Copyright © 2025, All Rights Reserved - Developed by{" "}
           <span className="font-ranade-bold">GonzaalzzDVP</span>
         </p>
       </div>

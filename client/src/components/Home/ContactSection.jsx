@@ -9,8 +9,8 @@ export default function ContactSection({ id }) {
       id={id}
       className="min-h-[calc(100vh-88px)] lg:h-[calc(100vh-88px)] w-full py-12 px-4 sm:px-6 lg:py-0 lg:px-0 lg:my-10 flex flex-col justify-center items-center gap-8 lg:gap-10"
     >
-      <h3 className="text-(--pinkRose) text-2xl sm:text-3xl lg:text-4xl uppercase text-center">
-        Comunícate <span className="font-clash-bold">con nosotros</span>
+      <h3 className="w-80 md:w-full text-(--pinkRose) text-2xl sm:text-3xl lg:text-4xl uppercase text-center">
+        Comunícate <span className="font-clash-bold">con&nbsp;nosotros</span>
       </h3>
 
       <form
