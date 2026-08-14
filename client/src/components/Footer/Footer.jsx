@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Footer() {
   const footerCategories = [
@@ -9,11 +9,29 @@ export default function Footer() {
     { name: "Diario", slug: "diario" },
   ];
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleContactClick = () => {
+    if (location.pathname === "/") {
+      document.getElementById("contact")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    } else {
+      navigate("/?scrollTo=contact");
+    }
+  };
+
   return (
     <footer className="w-full bg-(--blackBean) flex flex-col justify-center items-center z-10">
       {/* Banner CTA Superior */}
-      <div className="min-h-[70vh] lg:h-[70vh] w-full bg-(--pinkRose) flex flex-col lg:flex-row justify-between items-center py-12 px-6 sm:px-12 lg:py-0 lg:px-0 overflow-hidden">
-        <div className="flex flex-col justify-center items-center lg:items-start gap-6 text-(--whiteBlume) text-center lg:text-left lg:pl-16 xl:pl-24 w-full lg:w-1/2">
+      <div className="relative min-h-[70vh] lg:h-[70vh] w-full flex flex-col lg:flex-row justify-between items-center pt-12 px-6 sm:px-12 lg:py-0 lg:px-0 overflow-hidden">
+        <img
+          src="/footer/footerbgd.png"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="flex flex-col justify-center items-center lg:items-start gap-6 text-(--whiteBlume) text-center lg:text-left lg:pl-16 xl:pl-24 w-full lg:w-1/2 z-10">
           <h4 className="w-full lg:w-[85%] xl:w-[70%] text-3xl sm:text-4xl lg:text-5xl leading-tight">
             Somos tus aliados para que luzcas espectacular
           </h4>
@@ -21,18 +39,18 @@ export default function Footer() {
             Contáctanos para agendar una cita y conocer más
           </p>
           <div className="w-full lg:w-[85%] xl:w-[70%] mt-2 lg:mt-0">
-            <a
-              href="#contact"
-              className="inline-block px-6 py-3 bg-(--whiteBlume) hover:bg-(--blackBean) text-(--blackBean) hover:text-(--whiteBlume) rounded-xl transition-colors text-sm sm:text-base font-medium"
-            >
+            <button
+              type="button"
+              onClick={handleContactClick}
+              className="inline-block px-6 py-3 bg-(--whiteBlume) hover:bg-(--blackBean) text-(--blackBean) hover:text-(--whiteBlume) rounded-xl transition-colors text-sm sm:text-base font-medium cursor-pointer">
               ¡Escríbenos!
-            </a>
+            </button>
           </div>
         </div>
         <img
           src="/footer/footer.png"
           alt="Footer Banner"
-          className="h-64 sm:h-80 lg:h-full object-cover object-center mt-8 lg:mt-0"
+          className="h-80 md:h-110 lg:h-full object-cover object-center mt-8 lg:mt-0 lg:pt-8 lg:pr-8 z-10"
         />
       </div>
 
@@ -99,7 +117,9 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-3 sm:gap-5 font-ranade-regular lg:h-60">
-          <h4 className="text-base sm:text-lg font-clash-light">Sobre nosotros</h4>
+          <h4 className="text-base sm:text-lg font-clash-light">
+            Sobre nosotros
+          </h4>
           <ul className="text-xs sm:text-sm space-y-2 lg:space-y-1">
             <li>
               <Link

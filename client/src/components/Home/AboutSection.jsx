@@ -9,22 +9,9 @@ export default function AboutSection() {
       </h2>
 
       <p className="w-full sm:w-[90%] md:w-[85%] lg:w-[80%] text-base lg:text-lg text-center font-ranade-regular leading-relaxed md:leading-normal">
-        Fundada en 2022 en la vibrante Montreal,{" "}
-        <span className="text-(--orangeBlume) font-ranade-bold">Alcôve</span> es
-        una marca profesional de cuidado capilar dedicada a crear rutinas
-        personalizadas para todo tipo de cabello, incluyendo el rizado, ondulado
-        y afro. Formulamos y fabricamos{" "}
-        <span className="text-(--orangeBlume) font-ranade-bold">
-          champús, acondicionadores, productos de peinado
-        </span>{" "}
-        y tratamientos de alta calidad diseñados para nutrir, definir y proteger
-        tu cabello. Nuestra misión es ofrecer soluciones genuinas y efectivas
-        para el cuidado del cabello que brinden resultados reales, sin
-        artificios ni filtros. Comprometidos con la transparencia, la
-        accesibilidad y las prácticas libres de crueldad animal, Alcôve ofrece
-        un refugio de confianza para quienes buscan productos de cuidado capilar
-        de calidad profesional que celebren la individualidad y la belleza
-        natural.
+        Blume nace de la convicción de que{" "}
+        <span className="text-(--orangeBlume) font-ranade-Bold-italic">todo cabello merece florecer </span>
+         . Nuestro fuerte son los productos formulados con cuidado e intención, pensados para acercar tu cabello a su mejor versión — sin importar su volumen, su forma o su textura. Cada línea constituye una rutina completa que se adapta a ti, para que cada paso se sienta como un ritual de renovación y amor propio. Porque cuidar bien de tu físico no debe ser la excepción, es el punto de partida.
       </p>
     </section>
   );

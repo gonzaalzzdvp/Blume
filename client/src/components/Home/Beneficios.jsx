@@ -16,10 +16,10 @@ export default function Beneficios() {
   return (
     <div className="bg-(--citronLight) min-h-[25rem] lg:h-100 w-full py-12 px-6 md:py-16 md:px-10 lg:py-20 flex flex-col justify-center items-center gap-8 md:gap-12 lg:gap-20">
       <h3 className="text-2xl sm:text-3xl lg:text-4xl text-(--citron) uppercase text-center">
-        Nos preocupamos por{" "}
         <span className="font-clash-bold block sm:inline">
-          la salud de tu cabello
+        ALcove{" "}
         </span>
+          es...
       </h3>
 
       <div className="w-full grid grid-cols-3 md:grid-cols-6 lg:flex lg:justify-center items-center gap-4 sm:gap-6 lg:gap-10">

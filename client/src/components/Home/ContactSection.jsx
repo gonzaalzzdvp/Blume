@@ -1,11 +1,14 @@
 import React from "react";
 import { useForm, ValidationError } from "@formspree/react";
 
-export default function ContactSection() {
+export default function ContactSection({ id }) {
   const [state, handleSubmit] = useForm("xrenayve");
 
   return (
-    <section className="min-h-[calc(100vh-88px)] lg:h-[calc(100vh-88px)] w-full py-12 px-4 sm:px-6 lg:py-0 lg:px-0 lg:my-10 flex flex-col justify-center items-center gap-8 lg:gap-10">
+    <section
+      id={id}
+      className="min-h-[calc(100vh-88px)] lg:h-[calc(100vh-88px)] w-full py-12 px-4 sm:px-6 lg:py-0 lg:px-0 lg:my-10 flex flex-col justify-center items-center gap-8 lg:gap-10"
+    >
       <h3 className="text-(--pinkRose) text-2xl sm:text-3xl lg:text-4xl uppercase text-center">
         Comunícate <span className="font-clash-bold">con nosotros</span>
       </h3>
@@ -31,7 +34,7 @@ export default function ContactSection() {
               {/* Nombre */}
               <label
                 htmlFor="name"
-                className="w-full flex flex-col gap-2 text-(--blackBean) text-sm sm:text-base"
+                className="w-full flex flex-col gap-2 text-(--blackBean) text-sm sm:text-base font-ranade-bold"
               >
                 Nombre
                 <input
@@ -40,14 +43,14 @@ export default function ContactSection() {
                   type="text"
                   placeholder="María Perez"
                   required
-                  className="w-full border-b border-(--pinkRose) outline-none bg-transparent py-2"
+                  className="w-full border-b border-(--pinkRose) outline-none bg-transparent py-2 font-ranade-regular"
                 />
               </label>
 
               {/* Teléfono */}
               <label
                 htmlFor="phone"
-                className="w-full flex flex-col gap-2 text-(--blackBean) text-sm sm:text-base"
+                className="w-full flex flex-col gap-2 text-(--blackBean) text-sm sm:text-base font-ranade-bold"
               >
                 Número de teléfono
                 <input
@@ -55,7 +58,7 @@ export default function ContactSection() {
                   name="Phone"
                   placeholder="+58 000 000 00 00"
                   type="tel"
-                  className="w-full border-b border-(--pinkRose) outline-none bg-transparent py-2"
+                  className="w-full border-b border-(--pinkRose) outline-none bg-transparent py-2 font-ranade-regular"
                 />
               </label>
             </div>
@@ -63,7 +66,7 @@ export default function ContactSection() {
             {/* Email */}
             <label
               htmlFor="email"
-              className="flex flex-col gap-2 text-(--blackBean) text-sm sm:text-base"
+              className="flex flex-col gap-2 text-(--blackBean) text-sm sm:text-base font-ranade-bold"
             >
               Email
               <input
@@ -72,7 +75,7 @@ export default function ContactSection() {
                 type="email"
                 placeholder="email@ejemplo.com"
                 required
-                className="w-full border-b border-(--pinkRose) outline-none bg-transparent py-2"
+                className="w-full border-b border-(--pinkRose) outline-none bg-transparent py-2 font-ranade-regular"
               />
             </label>
 
@@ -85,7 +88,7 @@ export default function ContactSection() {
             {/* Mensaje */}
             <label
               htmlFor="message"
-              className="flex flex-col gap-2 text-(--blackBean) text-sm sm:text-base"
+              className="flex flex-col gap-2 text-(--blackBean) text-sm sm:text-base font-ranade-bold"
             >
               Mensaje
               <textarea
@@ -94,7 +97,7 @@ export default function ContactSection() {
                 rows="3"
                 placeholder="Cuéntanos cualquier cosa que quieras saber sobre Blume"
                 required
-                className="w-full border-b border-(--pinkRose) outline-none bg-transparent py-2 resize-none"
+                className="w-full border-b border-(--pinkRose) outline-none bg-transparent py-2 resize-none font-ranade-regular"
               />
             </label>
 

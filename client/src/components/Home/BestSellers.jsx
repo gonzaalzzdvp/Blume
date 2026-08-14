@@ -21,7 +21,7 @@ export default function BestSellers() {
   return (
     <div className="min-h-[calc(100vh-88px)] w-full p-6 lg:p-0 flex flex-col justify-center items-center gap-8 lg:gap-10 py-12 lg:py-0">
       <h2 className="text-(--orangeBlume) text-2xl sm:text-3xl lg:text-4xl uppercase text-center">
-        Nuestros Blumies <span className="font-clash-bold">Más vendidos</span>
+        Nuestros Productos <span className="font-clash-bold">Más vendidos</span>
       </h2>
 
       <ul className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-6xl">
@@ -38,10 +38,10 @@ export default function BestSellers() {
               />
 
               <div className="w-full flex flex-col gap-1 text-center lg:text-left">
-                <p className="text-sm lg:text-md font-medium line-clamp-2">
+                <p className="text-sm lg:text-md font-ranade-regular line-clamp-2">
                   {product.title}
                 </p>
-                <p className="text-xs lg:text-sm font-semibold">
+                <p className="text-xs lg:text-sm font-ranade-bold text-(--orangeBlume)">
                   ${product.price}
                 </p>
               </div>
