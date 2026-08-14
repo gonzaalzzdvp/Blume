@@ -5,22 +5,22 @@ export default function GridAnimation() {
   const gridRef = useRef(null);
 
   const imagePool = [
+    "/GsapImages/12.png",
     "/GsapImages/1.png",
-    "/GsapImages/2.png",
-    "/GsapImages/3.png",
+    "/GsapImages/16.png",
     "/GsapImages/4.png",
-    "/GsapImages/5.png",
-    "/GsapImages/6.png",
     "/GsapImages/7.png",
+    "/GsapImages/15.png",
     "/GsapImages/8.png",
-    "/GsapImages/9.png",
+    "/GsapImages/3.png",
+    "/GsapImages/6.png",
     "/GsapImages/10.png",
     "/GsapImages/11.png",
-    "/GsapImages/12.png",
+    "/GsapImages/9.png",
     "/GsapImages/13.png",
+    "/GsapImages/2.png",
     "/GsapImages/14.png",
-    "/GsapImages/15.png",
-    "/GsapImages/16.png",
+    "/GsapImages/5.png",
   ];
 
   const [images, setImages] = useState(imagePool);

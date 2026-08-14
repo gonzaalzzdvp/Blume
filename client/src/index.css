@@ -34,6 +34,14 @@
 }
 
 @font-face {
+  font-family: 'Ranade-Italic';
+  src: url('./assets/Ranade/Ranade-Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'HomemadeApple-Regular';
   src: url('./assets/HomemadeApple-Regular.ttf') format('truetype');
   font-weight: normal;
@@ -47,6 +55,7 @@
   --font-clash-light: 'ClashDisplay-Light', system-ui, -apple-system, sans-serif;
   --font-ranade-regular: 'Ranade-Regular', system-ui, -apple-system, sans-serif;
   --font-ranade-bold: 'Ranade-Bold', system-ui, -apple-system, sans-serif;
+  --font-ranade-italic: 'Ranade-Italic', system-ui, -apple-system, sans-serif;
   --font-homemade-apple: 'HomemadeApple-Regular', system-ui, -apple-system, sans-serif;
 }
 

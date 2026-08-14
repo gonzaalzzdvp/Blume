@@ -10,63 +10,86 @@ export default function Footer() {
   ];
 
   return (
-    <div className="w-full bg-(--blackBean) flex flex-col justify-center items-center z-10">
-      <div className="h-[70vh] w-full bg-(--pinkRose) flex justify-between items-center ">
-        <div className="flex flex-col justify-start items-center gap-6 text-(--whiteBlume)">
-          <h4 className="w-[70%] text-5xl">
+    <footer className="w-full bg-(--blackBean) flex flex-col justify-center items-center z-10">
+      {/* Banner CTA Superior */}
+      <div className="min-h-[70vh] lg:h-[70vh] w-full bg-(--pinkRose) flex flex-col lg:flex-row justify-between items-center py-12 px-6 sm:px-12 lg:py-0 lg:px-0 overflow-hidden">
+        <div className="flex flex-col justify-center items-center lg:items-start gap-6 text-(--whiteBlume) text-center lg:text-left lg:pl-16 xl:pl-24 w-full lg:w-1/2">
+          <h4 className="w-full lg:w-[85%] xl:w-[70%] text-3xl sm:text-4xl lg:text-5xl leading-tight">
             Somos tus aliados para que luzcas espectacular
           </h4>
-          <p className="w-[70%] text-xl font-ranade-regular">
+          <p className="w-full lg:w-[85%] xl:w-[70%] text-base sm:text-lg lg:text-xl font-ranade-regular">
             Contáctanos para agendar una cita y conocer más
           </p>
-          <div className="w-[70%]">
-            <a href="#contact" className="px-4 py-3 bg-(--whiteBlume) hover:bg-(--blackBean) text-(--blackBean) hover:text-(--whiteBlume) rounded-xl">
+          <div className="w-full lg:w-[85%] xl:w-[70%] mt-2 lg:mt-0">
+            <a
+              href="#contact"
+              className="inline-block px-6 py-3 bg-(--whiteBlume) hover:bg-(--blackBean) text-(--blackBean) hover:text-(--whiteBlume) rounded-xl transition-colors text-sm sm:text-base font-medium"
+            >
               ¡Escríbenos!
             </a>
           </div>
         </div>
-        <img src="/footer/footer.png" className="h-full" />
+        <img
+          src="/footer/footer.png"
+          alt="Footer Banner"
+          className="h-64 sm:h-80 lg:h-full object-cover object-center mt-8 lg:mt-0"
+        />
       </div>
-      <div className="h-[30vh] mt-20 bg-(--blackBean) flex justify-center items-center gap-30 text-(--whiteBlume)">
-        <div className="h-60 flex flex-col gap-5 font-ranade-regular">
-          <h4 className="text-lg">Contacto</h4>
-          <ul className="text-sm">
-            <li>
-                +58 412 611 20 94
-            </li>
-            <li>
-                blumecareve@gmail.com
-            </li>
+
+      {/* Enlaces de Navegación */}
+      <div className="w-full py-12 px-6 sm:px-12 lg:py-0 lg:px-0 lg:h-[30vh] lg:mt-20 bg-(--blackBean) grid grid-cols-2 sm:grid-cols-4 lg:flex lg:justify-center items-start lg:items-center gap-8 sm:gap-12 lg:gap-30 text-(--whiteBlume)">
+        <div className="flex flex-col gap-3 sm:gap-5 font-ranade-regular lg:h-60">
+          <h4 className="text-base sm:text-lg font-clash-light">Contacto</h4>
+          <ul className="text-xs sm:text-sm space-y-2 lg:space-y-1">
+            <li>+58 412 611 20 94</li>
+            <li className="break-all sm:break-normal">blumecareve@gmail.com</li>
           </ul>
         </div>
-        <div className="h-60 flex flex-col gap-5 font-ranade-regular">
-          <h4 className="text-lg">RRSS</h4>
-          <ul className="text-sm">
+
+        <div className="flex flex-col gap-3 sm:gap-5 font-ranade-regular lg:h-60">
+          <h4 className="text-base sm:text-lg font-clash-light">RRSS</h4>
+          <ul className="text-xs sm:text-sm space-y-2 lg:space-y-1">
             <li>
-              <Link to="/https://www.facebook.com" className="hover:text-(--pinkRose)">
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-(--pinkRose) transition-colors"
+              >
                 Facebook
-              </Link>
+              </a>
             </li>
             <li>
-              <Link to="https://www.instagram.com/blumecareve/" className="hover:text-(--pinkRose)">
+              <a
+                href="https://www.instagram.com/blumecareve/"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-(--pinkRose) transition-colors"
+              >
                 Instagram
-              </Link>
+              </a>
             </li>
             <li>
-              <Link to="/https://www.tiktok.com" className="hover:text-(--pinkRose)">
+              <a
+                href="https://www.tiktok.com"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-(--pinkRose) transition-colors"
+              >
                 Tiktok
-              </Link>
+              </a>
             </li>
           </ul>
         </div>
-        <div className="h-60 flex flex-col gap-5 font-ranade-regular">
-          <h4 className="text-lg">Tienda</h4>
-          <ul className="text-sm">
+
+        <div className="flex flex-col gap-3 sm:gap-5 font-ranade-regular lg:h-60">
+          <h4 className="text-base sm:text-lg font-clash-light">Tienda</h4>
+          <ul className="text-xs sm:text-sm space-y-2 lg:space-y-1">
             {footerCategories.map((category) => (
               <li key={category.slug}>
                 <Link
                   to={`/catalog?category=${category.slug}`}
-                  className="hover:text-(--pinkRose)"
+                  className="hover:text-(--pinkRose) transition-colors"
                 >
                   {category.name}
                 </Link>
@@ -74,30 +97,45 @@ export default function Footer() {
             ))}
           </ul>
         </div>
-        <div className="h-60 flex flex-col gap-5 font-ranade-regular">
-          <h4 className="text-lg">Sobre nosotros</h4>
-          <ul className="text-sm">
+
+        <div className="flex flex-col gap-3 sm:gap-5 font-ranade-regular lg:h-60">
+          <h4 className="text-base sm:text-lg font-clash-light">Sobre nosotros</h4>
+          <ul className="text-xs sm:text-sm space-y-2 lg:space-y-1">
             <li>
-              <Link to="/" className="hover:text-(--pinkRose)">
+              <Link
+                to="/"
+                className="hover:text-(--pinkRose) transition-colors"
+              >
                 Política de privacidad
               </Link>
             </li>
             <li>
-              <Link to="/" className="hover:text-(--pinkRose)">
+              <Link
+                to="/"
+                className="hover:text-(--pinkRose) transition-colors"
+              >
                 Términos y condiciones
               </Link>
             </li>
             <li>
-              <Link to="/" className="hover:text-(--pinkRose)">
+              <Link
+                to="/"
+                className="hover:text-(--pinkRose) transition-colors"
+              >
                 Pagos
               </Link>
             </li>
           </ul>
         </div>
       </div>
-      <div className="h-10 w-[90%] flex justify-center items-center text-(--whiteBlume) text-sm font-ranade-regular border-t">
-        <p>Copyright © 2025, All Rights Reserved - Develop by <span className="font-ranade-bold">GonzaalzzDVP</span></p>
+
+      {/* Copyright */}
+      <div className="py-6 lg:py-0 lg:h-10 w-[90%] flex justify-center items-center text-(--whiteBlume) text-xs sm:text-sm font-ranade-regular border-t border-white/20 text-center">
+        <p>
+          Copyright © 2025, All Rights Reserved - Develop by{" "}
+          <span className="font-ranade-bold">GonzaalzzDVP</span>
+        </p>
       </div>
-    </div>
+    </footer>
   );
 }

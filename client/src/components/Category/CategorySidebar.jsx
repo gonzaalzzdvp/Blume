@@ -4,60 +4,62 @@ export default function CategorySidebar({
   onSelectCategory,
 }) {
   return (
-    <aside className="w-64 pr-6">
-      <h2 className="text-xl font-clash-display mb-4 ">Categorías</h2>
+    <aside className="w-full md:w-44 md:pr-6 shrink-0">
+      <h2 className="text-xl font-clash-display mb-3 md:mb-4">Categorías</h2>
 
-      <button
-        onClick={() => onSelectCategory(null)}
-        className={`
-          block
-          w-full
-          text-left
-          py-2
-          cursor-pointer
-          ${selectedCategory === null ? "font-ranade-regular text-(--pinkRose)" : ""}
-        `}
-      >
-        🛍️ Todos
-      </button>
-
-      <button
-        onClick={() => onSelectCategory("featured")}
-        className={`
-          block
-          w-full
-          text-left
-          py-2
-          cursor-pointer
-          ${
-            selectedCategory === "featured" ? "font-ranade-bold text-(--pinkRose)" : ""
-          }
-        `}
-      >
-        ⭐ Destacados
-      </button>
-
-      {categories.map((category) => (
+      {/* 
+        En móvil: Scroll horizontal sin romper la vista
+        En md+: Menú vertical tradicional 
+      */}
+      <div className="flex md:flex-col gap-2 md:gap-0 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
         <button
-          key={category.id}
-          onClick={() => onSelectCategory(category.slug)}
+          onClick={() => onSelectCategory(null)}
           className={`
-            block
-            w-full
-            text-left
-            py-2
-            cursor-pointer
-            font-ranade-regular
+            whitespace-nowrap px-4 py-2 md:px-0 md:py-2 text-left text-(--blackBlume) cursor-pointer transition-colors
+            rounded-full md:rounded-none bg-gray-100 md:bg-transparent
             ${
-              selectedCategory === category.slug
-                ? "font-ranade-bold text-(--pinkRose)"
-                : ""
+              selectedCategory === null
+                ? "font-ranade-bold text-(--pinkRose) bg-(--pinkRose)/10 md:bg-transparent"
+                : "font-ranade-regular text-(--blackBean)"
             }
           `}
         >
-          🌻{" "}{category.name}
+          🛍️ Todos
         </button>
-      ))}
+
+        <button
+          onClick={() => onSelectCategory("featured")}
+          className={`
+            whitespace-nowrap px-4 py-2 md:px-0 md:py-2 text-left text-(--blackBlume) cursor-pointer transition-colors
+            rounded-full md:rounded-none bg-gray-100 md:bg-transparent
+            ${
+              selectedCategory === "featured"
+                ? "font-ranade-bold text-(--pinkRose) bg-(--pinkRose)/10 md:bg-transparent"
+                : "font-ranade-regular text-(--blackBean)"
+            }
+          `}
+        >
+          ⭐ Destacados
+        </button>
+
+        {categories.map((category) => (
+          <button
+            key={category.id}
+            onClick={() => onSelectCategory(category.slug)}
+            className={`
+              whitespace-nowrap px-4 py-2 md:px-0 md:py-2 text-left text-(--blackBlume) cursor-pointer transition-colors
+              rounded-full md:rounded-none bg-gray-100 md:bg-transparent
+              ${
+                selectedCategory === category.slug
+                  ? "font-ranade-bold text-(--pinkRose) bg-(--pinkRose)/10 md:bg-transparent"
+                  : "font-ranade-regular text-(--blackBean)"
+              }
+            `}
+          >
+            🌻 {category.name}
+          </button>
+        ))}
+      </div>
     </aside>
   );
 }

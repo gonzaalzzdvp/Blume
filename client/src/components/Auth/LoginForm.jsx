@@ -41,7 +41,7 @@ export default function LoginForm() {
           {...register("email", {
             required: "Ingrese su correo.",
           })}
-          className="w-80 p-3 rounded-lg outline-none inputShadow"
+          className="w-80 p-3 rounded-lg outline-none inputShadow font-ranade-regular"
         />
 
         {errors.email && (
@@ -56,7 +56,7 @@ export default function LoginForm() {
           {...register("password", {
             required: "Ingrese su contraseña.",
           })}
-          className="w-80 p-3 rounded-lg outline-none inputShadow"
+          className="w-80 p-3 rounded-lg outline-none inputShadow font-ranade-regular"
         />
 
         {errors.password && (
@@ -75,14 +75,15 @@ export default function LoginForm() {
           rounded-lg
           hover:bg-(--blackBean)
           cursor-pointer
+          font-ranade-regular
         "
       >
         Iniciar sesión
       </button>
 
-      <p className="w-80 text-center">
+      <p className="w-80 text-center font-ranade-regular">
         ¿No tienes cuenta?
-        <Link to="/register" className="ml-2 text-(--pinkRose) hover:underline">
+        <Link to="/register" className="ml-2 text-(--pinkRose) hover:underline font-ranade-bold">
           Crear cuenta
         </Link>
       </p>

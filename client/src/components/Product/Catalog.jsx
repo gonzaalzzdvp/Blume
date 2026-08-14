@@ -52,10 +52,7 @@ export default function Catalog() {
     try {
       setLoadingProducts(true);
 
-      const data = await getProducts(
-        debouncedSearch,
-        selectedCategory
-      );
+      const data = await getProducts(debouncedSearch, selectedCategory);
 
       setProducts(data);
     } catch (error) {
@@ -66,35 +63,30 @@ export default function Catalog() {
   };
 
   return (
-    <main className="mt-22 min-h-[calc(100vh-88px)] max-w-7xl mx-auto p-6">
-      <h1 className="mb-8 text-4xl font-clash-bold text-(--orangeBlume)">
+    <main className="mt-20 md:mt-24 min-h-[calc(100vh-88px)] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 className="mb-6 md:mb-8 text-3xl md:text-4xl font-clash-bold text-(--orangeBlume)">
         Catálogo
       </h1>
 
-      <div className="flex gap-10">
+      {/* Disposición flex-col en móviles (uno encima del otro) y flex-row a partir de md */}
+      <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
         <CategorySidebar
           categories={categories}
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
         />
 
-        <div className="flex-1">
-          <SearchBar
-            search={search}
-            setSearch={setSearch}
-          />
+        <div className="w-full flex-1">
+          <SearchBar search={search} setSearch={setSearch} />
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {loadingProducts ? (
               Array.from({ length: 8 }).map((_, index) => (
                 <ProductCardSkeleton key={index} />
               ))
             ) : products.length > 0 ? (
               products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                />
+                <ProductCard key={product.id} product={product} />
               ))
             ) : (
               <div className="col-span-full py-20 text-center text-gray-500">

@@ -10,10 +10,10 @@ export default function EmptyCart() {
         icon={faBagShopping}
         className="text-7xl text-(--orangeBlume)"
       />
-      <h2 className="mt-6 text-3xl font-semibold">
+      <h2 className="mt-6 text-3xl font-clash-light">
         Tu carrito está vacío
       </h2>
-      <p className="mt-3 text-gray-500">
+      <p className="mt-3 text-gray-500 text-center font-ranade-regular">
         Agrega algunos productos para comenzar tu compra.
       </p>
       <Link
@@ -27,6 +27,7 @@ export default function EmptyCart() {
           py-3
           rounded-lg
           transition
+          font-ranade-regular
         "
       >
         Ir al catálogo

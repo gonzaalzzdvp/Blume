@@ -78,7 +78,7 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
       {/* Drawer */}
       <div
         className={`
-          fixed inset-y-0 left-0 w-100 bg-white z-50
+          fixed inset-y-0 left-0 w-80 md:w-100 bg-white z-50
           transition-transform duration-300 ease-in-out
           ${menuOpen ? "translate-x-0" : "-translate-x-full"}
         `}
@@ -149,9 +149,9 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
             </div>
 
             <div className="h-[calc(100vh-120px)] flex flex-col">
-              <div className="flex-1">
+              <div className="flex-1 font-ranade-regular">
                 {/* Enlaces de Navegación */}
-                <div className="h-14 px-4 flex items-center text-lg hover:bg-(--grayBlume) hover:text-(--blackBean)">
+                <div className="h-14 px-4 flex items-center text-lg hover:bg-(--grayBlume) hover:text-(--blackBean) ">
                   <Link to="/catalog">
                     <span className="cursor-pointer">Todos los productos</span>
                   </Link>
@@ -174,13 +174,13 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
                   <span className="cursor-pointer">Beneficios</span>
                 </div>
               </div>
-              <div className="border-t border-(--grayBlume)">
+              <div className="border-t border-(--grayBlume) font-ranade-regular">
                 {authenticated ? (
                   <Link
                     to="/profile"
                     className="h-14 px-4 flex items-center gap-3 text-lg hover:bg-(--grayBlume) hover:text-(--blackBean)"
                   >
-                    <FontAwesomeIcon icon={faUser} className="text-xl" />
+                    <FontAwesomeIcon icon={faUser} className="text-xl text-(--blackBean)" />
 
                     <span>Perfil</span>
                   </Link>
@@ -189,7 +189,7 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
                     to="/login"
                     className="h-14 px-4 flex items-center gap-3 text-lg hover:bg-(--grayBlume) hover:text-(--blackBean)"
                   >
-                    <FontAwesomeIcon icon={faUser} className="text-xl" />
+                    <FontAwesomeIcon icon={faUser} className="text-xl text-(--blackBean)" />
 
                     <span>Iniciar sesión</span>
                   </Link>
@@ -211,15 +211,15 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
               <button onClick={() => setCategoriesOpen(false)}>
                 <FontAwesomeIcon
                   icon={faAngleLeft}
-                  className="cursor-pointer text-xl text-(--pinkRose)"
+                  className="cursor-pointer text-xl text-(--blackBean) hover:text-(--pinkRose)"
                 />
               </button>
-              <span className="font-semibold uppercase">Categorías</span>
+              <span className="font-clash-light uppercase">Categorías</span>
             </div>
 
             {/* Grid categorías */}
             <div className="h-[calc(100vh-64px)] flex flex-col">
-              <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 gap-y-8 gap-2">
+              <div className="p-4 grid grid-cols-2 gap-y-8 gap-2">
                 {categories.map((category) => (
                   <Link
                     to={`/catalog?category=${category.slug}`}
@@ -233,7 +233,7 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                       />
                     </div>
-                    <span className="mt-2 text-sm font-medium">
+                    <span className="mt-2 text-sm font-ranade-regular">
                       {category.name} {" >"}
                     </span>
                   </Link>
