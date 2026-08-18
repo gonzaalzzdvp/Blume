@@ -1,3 +1,6 @@
+import json
+
+from django.db import transaction
 from django.utils.text import slugify
 
 from rest_framework import serializers
@@ -6,6 +9,41 @@ import cloudinary.utils
 
 from products.models import Product, ProductImage
 from products.serializers import ProductImageSerializer
+
+
+def parse_json_list(value, default=None):
+    """
+    Convierte una lista recibida como JSON desde multipart/form-data
+    en una lista de Python.
+
+    Ejemplo:
+
+        '["34", "35"]'
+        ->
+        ["34", "35"]
+    """
+
+    if default is None:
+        default = []
+
+    if value is None:
+        return default
+
+    if isinstance(value, list):
+        return value
+
+    if isinstance(value, str):
+
+        try:
+            parsed = json.loads(value)
+
+        except (json.JSONDecodeError, TypeError):
+            return default
+
+        if isinstance(parsed, list):
+            return parsed
+
+    return default
 
 
 class AdminProductSerializer(serializers.ModelSerializer):
@@ -28,14 +66,17 @@ class AdminProductSerializer(serializers.ModelSerializer):
         required=False,
     )
 
-    deleted_images = serializers.ListField(
-        child=serializers.IntegerField(),
+    gallery_image_keys = serializers.CharField(
         write_only=True,
         required=False,
     )
 
-    image_order = serializers.ListField(
-        child=serializers.IntegerField(),
+    deleted_images = serializers.CharField(
+        write_only=True,
+        required=False,
+    )
+
+    image_order = serializers.CharField(
         write_only=True,
         required=False,
     )
@@ -78,7 +119,6 @@ class AdminProductSerializer(serializers.ModelSerializer):
         slug = slugify(title)
 
         unique_slug = slug
-
         counter = 1
 
         while Product.objects.filter(
@@ -96,87 +136,320 @@ class AdminProductSerializer(serializers.ModelSerializer):
         product,
         images,
         start_position=1,
+        keys=None,
     ):
+        """
+        Crea las ProductImage.
+
+        Las posiciones iniciales son temporales.
+        El orden definitivo se aplica posteriormente
+        mediante image_order.
+        """
 
         created = []
 
-        for index, image in enumerate(
-            images,
-            start=start_position,
-        ):
+        keys = keys or []
+
+        for index, image in enumerate(images):
 
             item = ProductImage.objects.create(
                 product=product,
                 image=image,
-                position=index,
+                position=start_position + index,
             )
 
-            created.append(item)
+            created.append(
+                {
+                    "item": item,
+                    "key": (
+                        keys[index]
+                        if index < len(keys)
+                        else None
+                    ),
+                }
+            )
 
         return created
+
+    def normalize_positions(self, product):
+        """
+        Garantiza que las posiciones finales sean:
+
+        1, 2, 3, 4...
+
+        sin huecos.
+        """
+
+        images = list(
+            ProductImage.objects
+            .filter(product=product)
+            .order_by("position", "id")
+        )
+
+        for index, image in enumerate(
+            images,
+            start=1,
+        ):
+
+            if image.position != index:
+
+                ProductImage.objects.filter(
+                    id=image.id
+                ).update(
+                    position=index
+                )
 
     def apply_image_order(
         self,
         product,
         image_order,
+        new_images_map=None,
     ):
+        """
+        Aplica el orden enviado por React.
+
+        Ejemplo:
+
+        [
+            "new:abc",
+            "existing:34",
+            "new:def",
+            "existing:35"
+        ]
+
+        Resultado:
+
+        position 1 -> nueva abc
+        position 2 -> existing 34
+        position 3 -> nueva def
+        position 4 -> existing 35
+        """
 
         if not image_order:
             return
 
-        for position, image_id in enumerate(
-            image_order,
+        new_images_map = new_images_map or {}
+
+        # -------------------------------------------------
+        # POSICIONES TEMPORALES
+        # -------------------------------------------------
+        #
+        # position es PositiveIntegerField.
+        #
+        # NO podemos utilizar -1, -2, etc.
+        #
+        # Usamos valores altos para liberar las posiciones
+        # antes de asignar 1, 2, 3...
+        #
+
+        existing_images = list(
+            ProductImage.objects
+            .filter(product=product)
+            .order_by("id")
+        )
+
+        for index, image in enumerate(
+            existing_images,
             start=1,
         ):
 
             ProductImage.objects.filter(
-                id=image_id,
-                product=product,
+                id=image.id
             ).update(
-                position=position,
+                position=1000000 + index
             )
 
-    def update_main_image(
-        self,
-        product,
-    ):
+        # -------------------------------------------------
+        # APLICAR ORDEN DEFINITIVO
+        # -------------------------------------------------
 
-        first_image = product.images.order_by(
-            "position"
-        ).first()
+        position = 1
+
+        ordered_image_ids = set()
+
+        for token in image_order:
+
+            if not isinstance(token, str):
+                continue
+
+            # -------------------------------------------------
+            # IMAGEN EXISTENTE
+            # -------------------------------------------------
+
+            if token.startswith("existing:"):
+
+                try:
+
+                    image_id = int(
+                        token.replace(
+                            "existing:",
+                            "",
+                        )
+                    )
+
+                except ValueError:
+
+                    continue
+
+                image = (
+                    ProductImage.objects
+                    .filter(
+                        product=product,
+                        id=image_id,
+                    )
+                    .first()
+                )
+
+                if not image:
+                    continue
+
+                image.position = position
+
+                image.save(
+                    update_fields=[
+                        "position"
+                    ]
+                )
+
+                ordered_image_ids.add(
+                    image.id
+                )
+
+                position += 1
+
+            # -------------------------------------------------
+            # IMAGEN NUEVA
+            # -------------------------------------------------
+
+            elif token.startswith("new:"):
+
+                key = token.replace(
+                    "new:",
+                    "",
+                )
+
+                image = new_images_map.get(
+                    key
+                )
+
+                if not image:
+                    continue
+
+                image.position = position
+
+                image.save(
+                    update_fields=[
+                        "position"
+                    ]
+                )
+
+                ordered_image_ids.add(
+                    image.id
+                )
+
+                position += 1
+
+        # -------------------------------------------------
+        # IMÁGENES NO INCLUIDAS EN image_order
+        # -------------------------------------------------
+        #
+        # Por seguridad, cualquier ProductImage que no
+        # haya aparecido en image_order se coloca al final.
+        #
+        # Normalmente no debería ocurrir porque React envía
+        # todas las imágenes activas.
+        #
+
+        remaining_images = (
+            ProductImage.objects
+            .filter(product=product)
+            .exclude(
+                id__in=ordered_image_ids
+            )
+            .order_by("position", "id")
+        )
+
+        for image in remaining_images:
+
+            image.position = position
+
+            image.save(
+                update_fields=[
+                    "position"
+                ]
+            )
+
+            position += 1
+
+    def update_main_image(self, product):
+        """
+        Product.image siempre representa la primera
+        ProductImage según position.
+
+        Si no quedan imágenes, Product.image queda vacío.
+        """
+
+        first_image = (
+            ProductImage.objects
+            .filter(product=product)
+            .order_by("position", "id")
+            .first()
+        )
 
         if first_image:
 
             product.image = first_image.image
 
-        elif product.images.count() == 0:
+        else:
 
             product.image = None
 
         product.save(
-            update_fields=["image"]
+            update_fields=[
+                "image"
+            ]
         )
 
     #################################################
     # CREATE
     #################################################
 
-    def create(self, validated_data):
+    @transaction.atomic
+    def create(
+        self,
+        validated_data,
+    ):
 
         gallery_images = validated_data.pop(
             "gallery_images",
             []
         )
 
-        validated_data.pop(
-            "deleted_images",
-            None,
+        gallery_image_keys_raw = (
+            validated_data.pop(
+                "gallery_image_keys",
+                "[]",
+            )
         )
 
-        validated_data.pop(
-            "image_order",
-            None,
+        image_order_raw = (
+            validated_data.pop(
+                "image_order",
+                "[]",
+            )
         )
+
+        gallery_image_keys = parse_json_list(
+            gallery_image_keys_raw
+        )
+
+        image_order = parse_json_list(
+            image_order_raw
+        )
+
+        # -------------------------------------------------
+        # SLUG
+        # -------------------------------------------------
 
         validated_data["slug"] = (
             self.generate_unique_slug(
@@ -184,15 +457,60 @@ class AdminProductSerializer(serializers.ModelSerializer):
             )
         )
 
+        # -------------------------------------------------
+        # PRODUCTO
+        # -------------------------------------------------
+
         product = Product.objects.create(
             **validated_data
         )
 
-        self.create_gallery(
+        # -------------------------------------------------
+        # GALERÍA
+        # -------------------------------------------------
+
+        created_images = self.create_gallery(
             product,
             gallery_images,
-            start_position=1,
+            start_position=1000000,
+            keys=gallery_image_keys,
         )
+
+        new_images_map = {
+            item["key"]: item["item"]
+            for item in created_images
+            if item["key"]
+        }
+
+        # -------------------------------------------------
+        # ORDEN
+        # -------------------------------------------------
+
+        if not image_order:
+
+            image_order = [
+                f"new:{item['key']}"
+                for item in created_images
+                if item["key"]
+            ]
+
+        self.apply_image_order(
+            product,
+            image_order,
+            new_images_map,
+        )
+
+        # -------------------------------------------------
+        # NORMALIZAR
+        # -------------------------------------------------
+
+        self.normalize_positions(
+            product
+        )
+
+        # -------------------------------------------------
+        # PORTADA
+        # -------------------------------------------------
 
         self.update_main_image(
             product
@@ -204,6 +522,7 @@ class AdminProductSerializer(serializers.ModelSerializer):
     # UPDATE
     #################################################
 
+    @transaction.atomic
     def update(
         self,
         instance,
@@ -215,38 +534,70 @@ class AdminProductSerializer(serializers.ModelSerializer):
             []
         )
 
-        deleted_images = validated_data.pop(
-            "deleted_images",
-            []
+        gallery_image_keys_raw = (
+            validated_data.pop(
+                "gallery_image_keys",
+                "[]",
+            )
         )
 
-        image_order = validated_data.pop(
-            "image_order",
-            []
+        deleted_images_raw = (
+            validated_data.pop(
+                "deleted_images",
+                "[]",
+            )
         )
+
+        image_order_raw = (
+            validated_data.pop(
+                "image_order",
+                "[]",
+            )
+        )
+
+        # -------------------------------------------------
+        # PORTADA MANUAL
+        # -------------------------------------------------
+        #
+        # La dejamos compatible con tu API actual.
+        # Sin embargo, el flujo del ImageUploader no
+        # debería utilizarla.
+        #
 
         new_image = validated_data.pop(
             "image",
             None,
         )
 
+        gallery_image_keys = parse_json_list(
+            gallery_image_keys_raw
+        )
+
+        deleted_images = parse_json_list(
+            deleted_images_raw
+        )
+
+        image_order = parse_json_list(
+            image_order_raw
+        )
+
         old_title = instance.title
 
-        #################################################
-        # CAMPOS
-        #################################################
+        # -------------------------------------------------
+        # CAMPOS DEL PRODUCTO
+        # -------------------------------------------------
 
         for attr, value in validated_data.items():
 
             setattr(
                 instance,
                 attr,
-                value,
+                value
             )
 
-        #################################################
+        # -------------------------------------------------
         # SLUG
-        #################################################
+        # -------------------------------------------------
 
         if old_title != instance.title:
 
@@ -256,9 +607,9 @@ class AdminProductSerializer(serializers.ModelSerializer):
                 )
             )
 
-        #################################################
+        # -------------------------------------------------
         # PORTADA MANUAL
-        #################################################
+        # -------------------------------------------------
 
         if new_image:
 
@@ -266,53 +617,74 @@ class AdminProductSerializer(serializers.ModelSerializer):
 
         instance.save()
 
-        #################################################
+        # -------------------------------------------------
         # ELIMINAR IMÁGENES
-        #################################################
+        # -------------------------------------------------
 
-        if deleted_images:
+        deleted_ids = []
+
+        for image_id in deleted_images:
+
+            try:
+
+                deleted_ids.append(
+                    int(image_id)
+                )
+
+            except (
+                TypeError,
+                ValueError,
+            ):
+
+                continue
+
+        if deleted_ids:
 
             ProductImage.objects.filter(
                 product=instance,
-                id__in=deleted_images,
+                id__in=deleted_ids,
             ).delete()
 
-        #################################################
-        # AGREGAR NUEVAS
-        #################################################
+        # -------------------------------------------------
+        # CREAR NUEVAS IMÁGENES
+        # -------------------------------------------------
 
-        last_image = (
-            ProductImage.objects.filter(
-                product=instance
-            )
-            .order_by("-position")
-            .first()
-        )
-
-        next_position = (
-            last_image.position + 1
-            if last_image
-            else 1
-        )
-
-        self.create_gallery(
+        created_images = self.create_gallery(
             instance,
             gallery_images,
-            start_position=next_position,
+            start_position=1000000,
+            keys=gallery_image_keys,
         )
 
-        #################################################
-        # REORDENAR
-        #################################################
+        new_images_map = {
+            item["key"]: item["item"]
+            for item in created_images
+            if item["key"]
+        }
 
-        self.apply_image_order(
-            instance,
-            image_order,
+        # -------------------------------------------------
+        # ORDEN
+        # -------------------------------------------------
+
+        if image_order:
+
+            self.apply_image_order(
+                instance,
+                image_order,
+                new_images_map,
+            )
+
+        # -------------------------------------------------
+        # NORMALIZAR
+        # -------------------------------------------------
+
+        self.normalize_positions(
+            instance
         )
 
-        #################################################
-        # ACTUALIZAR PORTADA
-        #################################################
+        # -------------------------------------------------
+        # PORTADA
+        # -------------------------------------------------
 
         self.update_main_image(
             instance

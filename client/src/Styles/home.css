@@ -1,0 +1,157 @@
+.home-banner {
+  position: relative;
+
+  width: 100%;
+  height: calc(100vh - 88px);
+
+  margin-top: 88px;
+
+  overflow: hidden;
+}
+
+.home-banner__link {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+/* ==========================================
+   TRACK
+   ========================================== */
+
+.home-banner__track {
+  display: flex;
+  flex-direction: row;
+
+  height: 100%;
+
+  will-change: transform;
+}
+
+/* ==========================================
+   SLIDES
+   ========================================== */
+
+.home-banner__slide {
+  position: relative;
+
+  flex: 0 0 auto;
+
+  height: 100%;
+
+  overflow: hidden;
+}
+
+.home-banner__picture {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+}
+
+.home-banner__image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ==========================================
+   DOTS
+   ========================================== */
+
+.home-banner__dots {
+  position: absolute;
+
+  z-index: 20;
+
+  bottom: 24px;
+  left: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  transform: translateX(-50%);
+}
+
+.home-banner__dot {
+  width: 9px;
+  height: 9px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  cursor: pointer;
+
+  transition:
+    width 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.home-banner__dot--active {
+  width: 24px;
+
+  border-radius: 999px;
+
+  background: #ffffff;
+}
+
+.home-banner__dot:hover {
+  transform: scale(1.15);
+
+  background: #ffffff;
+}
+
+/* ==========================================
+   TABLET
+   ========================================== */
+
+@media (max-width: 1023px) {
+  .home-banner {
+    height: calc(100vh - 88px);
+  }
+
+  .home-banner__dots {
+    bottom: 20px;
+  }
+}
+
+/* ==========================================
+   MOBILE
+   ========================================== */
+
+@media (max-width: 767px) {
+  .home-banner {
+    height: calc(100vh - 88px);
+  }
+
+  .home-banner__dots {
+    bottom: 18px;
+
+    gap: 8px;
+  }
+
+  .home-banner__dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .home-banner__dot--active {
+    width: 21px;
+  }
+}

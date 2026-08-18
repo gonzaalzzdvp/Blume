@@ -21,21 +21,13 @@ export const getProduct = async (id) => {
 };
 
 export const createProduct = async (formData) => {
-  const response = await api.post("/admin/products/", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await api.post("/admin/products/", formData);
 
   return response.data;
 };
 
 export const updateProduct = async (id, formData) => {
-  const response = await api.put(`/admin/products/${id}/`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await api.put(`/admin/products/${id}/`, formData);
 
   return response.data;
 };
@@ -45,9 +37,9 @@ export const deleteProduct = async (id) => {
 };
 
 /*
-|-------------------------------------------------
+|--------------------------------------------------------------------------
 | Categorías
-|-------------------------------------------------
+|--------------------------------------------------------------------------
 */
 
 export async function getCategories() {

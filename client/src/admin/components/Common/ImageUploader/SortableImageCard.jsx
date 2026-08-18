@@ -3,11 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 import ImageCard from "./ImageCard";
 
-export default function SortableImageCard({
-  image,
-  index,
-  onDelete,
-}) {
+export default function SortableImageCard({ image, index, onDelete }) {
   const {
     attributes,
     listeners,
@@ -35,16 +31,13 @@ export default function SortableImageCard({
         ${isDragging ? "scale-105" : ""}
       `}
     >
-      <div
-        {...attributes}
-        {...listeners}
-      >
-        <ImageCard
-          image={image}
-          index={index}
-          onDelete={onDelete}
-        />
-      </div>
+      <ImageCard
+        image={image}
+        index={index}
+        onDelete={onDelete}
+        dragAttributes={attributes}
+        dragListeners={listeners}
+      />
     </div>
   );
 }

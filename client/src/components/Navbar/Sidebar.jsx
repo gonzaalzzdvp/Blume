@@ -27,6 +27,7 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
     volumen: "/categories/volume.png",
     rizos: "/categories/curls.png",
     violeta: "/categories/blonde.png",
+    "limited-kits": "/categories/limited-kits.png",
   };
 
   useEffect(() => {
