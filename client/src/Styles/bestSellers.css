@@ -1,0 +1,183 @@
+.best-sellers {
+  width: 100%;
+  min-height: calc(100vh - 88px);
+
+  padding: 3rem 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 2rem;
+
+  overflow: hidden;
+}
+
+/* ==========================================
+   VIEWPORT
+   ========================================== */
+
+.best-sellers__viewport {
+  width: 100%;
+  max-width: 1200px;
+
+  overflow: hidden;
+}
+
+/* ==========================================
+   TRACK
+   ========================================== */
+
+.best-sellers__track {
+  display: flex;
+  flex-direction: row;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+
+  will-change: transform;
+}
+
+/* ==========================================
+   SLIDE
+   ========================================== */
+
+.best-sellers__slide {
+  flex: 0 0 auto;
+
+  display: flex;
+
+  justify-content: center;
+
+  padding: 0 0.5rem;
+}
+
+/* ==========================================
+   PRODUCT
+   ========================================== */
+
+.best-sellers__product {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 0.75rem;
+}
+
+/* ==========================================
+   IMAGE
+   ========================================== */
+
+.best-sellers__image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  object-fit: cover;
+
+  border-radius: 1rem;
+}
+
+/* ==========================================
+   INFO
+   ========================================== */
+
+.best-sellers__info {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.25rem;
+
+  text-align: center;
+}
+
+/* ==========================================
+   DOTS
+   ========================================== */
+
+.best-sellers__dots {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.55rem;
+}
+
+.best-sellers__dot {
+  width: 9px;
+  height: 9px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.2);
+
+  cursor: pointer;
+
+  transition:
+    width 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.best-sellers__dot--active {
+  width: 24px;
+
+  background: var(--orangeBlume);
+}
+
+.best-sellers__dot:hover {
+  transform: scale(1.15);
+}
+
+/* ==========================================
+   MOBILE
+   ========================================== */
+
+@media (max-width: 639px) {
+  .best-sellers {
+    padding: 3rem 1rem;
+    gap: 1.75rem;
+  }
+
+  .best-sellers__slide {
+    padding: 0 0.4rem;
+  }
+}
+
+/* ==========================================
+   TABLET
+   ========================================== */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .best-sellers {
+    padding: 3rem 2rem;
+  }
+}
+
+/* ==========================================
+   DESKTOP
+   ========================================== */
+
+@media (min-width: 1024px) {
+  .best-sellers {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .best-sellers__slide {
+    padding: 0 0.75rem;
+  }
+}

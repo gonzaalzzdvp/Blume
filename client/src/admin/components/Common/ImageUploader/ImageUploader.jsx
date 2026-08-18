@@ -1,12 +1,8 @@
-import { useEffect } from "react";
+import { useMemo, useEffect } from "react";
 
 import { DndContext, closestCenter } from "@dnd-kit/core";
 
-import {
-  SortableContext,
-  rectSortingStrategy,
-  arrayMove,
-} from "@dnd-kit/sortable";
+import { arrayMove } from "@dnd-kit/sortable";
 
 import UploadButton from "./UploadButton";
 import ImageGrid from "./ImageGrid";
@@ -14,34 +10,109 @@ import ImageGrid from "./ImageGrid";
 export default function ImageUploader({
   existingImages,
   setExistingImages,
+
   newImages,
   setNewImages,
+
   deletedImages,
   setDeletedImages,
+
   imageOrder,
   setImageOrder,
 }) {
   /*
   |--------------------------------------------------------------------------
-  | Construcción de la lista visual
+  | Crear estructura visual
   |--------------------------------------------------------------------------
   */
 
-  const allImages = [
-    ...existingImages.map((img) => ({
-      id: img.id,
+  const normalizedExistingImages = useMemo(() => {
+    return existingImages.map((img) => ({
+      id: `existing:${img.id}`,
+      backendId: img.id,
       preview: img.image,
+      image: img.image,
       type: "existing",
-      isMain: img.isMain,
-    })),
+      file: null,
+    }));
+  }, [existingImages]);
 
-    ...newImages.map((file, index) => ({
-      id: `new-${index}`,
-      preview: URL.createObjectURL(file),
-      file,
-      type: "new",
-    })),
-  ];
+  const normalizedNewImages = useMemo(() => {
+    return newImages.map((item) => {
+      // Compatibilidad con el formato anterior:
+      // si todavía llega un File directamente.
+      if (item instanceof File) {
+        return {
+          id: item._imageId || `new:${crypto.randomUUID()}`,
+          backendId: null,
+          preview: URL.createObjectURL(item),
+          file: item,
+          type: "new",
+        };
+      }
+
+      return {
+        id: `new:${item.id}`,
+        backendId: null,
+        preview: item.preview,
+        file: item.file,
+        type: "new",
+      };
+    });
+  }, [newImages]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Lista visual
+  |--------------------------------------------------------------------------
+  */
+
+  const allImages = useMemo(() => {
+    const map = new Map();
+
+    normalizedExistingImages.forEach((image) => {
+      map.set(image.id, image);
+    });
+
+    normalizedNewImages.forEach((image) => {
+      map.set(image.id, image);
+    });
+
+    /*
+    |---------------------------------------------
+    | Si tenemos un orden guardado localmente,
+    | respetarlo.
+    |---------------------------------------------
+    */
+
+    if (imageOrder?.length) {
+      const ordered = [];
+
+      imageOrder.forEach((id) => {
+        const image = map.get(id);
+
+        if (image) {
+          ordered.push(image);
+          map.delete(id);
+        }
+      });
+
+      /*
+      |---------------------------------------------
+      | Agregar cualquier imagen que todavía
+      | no esté en imageOrder.
+      |---------------------------------------------
+      */
+
+      map.forEach((image) => {
+        ordered.push(image);
+      });
+
+      return ordered;
+    }
+
+    return [...normalizedExistingImages, ...normalizedNewImages];
+  }, [normalizedExistingImages, normalizedNewImages, imageOrder]);
 
   /*
   |--------------------------------------------------------------------------
@@ -50,27 +121,48 @@ export default function ImageUploader({
   */
 
   function handleSelect(files) {
-    setNewImages((prev) => [...prev, ...files]);
+    const newItems = Array.from(files).map((file) => ({
+      id: crypto.randomUUID(),
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setNewImages((prev) => [...prev, ...newItems]);
+
+    setImageOrder((prev) => [
+      ...prev,
+      ...newItems.map((item) => `new:${item.id}`),
+    ]);
   }
 
   /*
   |--------------------------------------------------------------------------
-  | Eliminar imágenes
+  | Eliminar
   |--------------------------------------------------------------------------
   */
 
   function handleDelete(image) {
     if (image.type === "existing") {
       setDeletedImages((prev) =>
-        prev.includes(image.id) ? prev : [...prev, image.id],
+        prev.includes(image.backendId) ? prev : [...prev, image.backendId],
       );
 
-      setExistingImages((prev) => prev.filter((img) => img.id !== image.id));
+      setExistingImages((prev) =>
+        prev.filter((img) => img.id !== image.backendId),
+      );
+
+      setImageOrder((prev) => prev.filter((id) => id !== image.id));
 
       return;
     }
 
-    setNewImages((prev) => prev.filter((file) => file !== image.file));
+    setNewImages((prev) =>
+      prev.filter((item) => item.id !== image.id.replace("new:", "")),
+    );
+
+    setImageOrder((prev) => prev.filter((id) => id !== image.id));
+
+    URL.revokeObjectURL(image.preview);
   }
 
   /*
@@ -82,48 +174,62 @@ export default function ImageUploader({
   function handleDragEnd(event) {
     const { active, over } = event;
 
-    if (!over || active.id === over.id) return;
+    if (!over || active.id === over.id) {
+      return;
+    }
 
-    const oldIndex = allImages.findIndex((img) => img.id === active.id);
+    const oldIndex = allImages.findIndex((image) => image.id === active.id);
 
-    const newIndex = allImages.findIndex((img) => img.id === over.id);
+    const newIndex = allImages.findIndex((image) => image.id === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) {
+      return;
+    }
 
     const reordered = arrayMove(allImages, oldIndex, newIndex);
 
-    const existing = reordered
-      .filter((img) => img.type === "existing")
-      .map((img, index) => ({
-        id: img.id,
-        image: img.image,
-        isMain: index === 0,
-      }));
+    /*
+     * El orden visual completo.
+     *
+     * Ejemplo:
+     *
+     * existing:4
+     * new:abc
+     * existing:2
+     * existing:8
+     */
 
-    const fresh = reordered
-      .filter((img) => img.type === "new")
-      .map((img) => img.file);
-
-    setExistingImages(existing);
-    setNewImages(fresh);
-
-    const orderedIds = reordered
-      .filter((img) => img.type === "existing")
-      .map((img) => img.id);
-
-    setImageOrder(orderedIds);
+    setImageOrder(reordered.map((image) => image.id));
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | Mantener imageOrder sincronizado
+  |--------------------------------------------------------------------------
+  */
+
   useEffect(() => {
-    if (!setImageOrder) return;
+    if (!imageOrder?.length) {
+      return;
+    }
 
-    const ids = existingImages.map((image) => image.id);
+    const validIds = new Set(allImages.map((image) => image.id));
 
-    setImageOrder(ids);
-  }, [existingImages, setImageOrder]);
+    const cleanedOrder = imageOrder.filter((id) => validIds.has(id));
+
+    if (cleanedOrder.length !== imageOrder.length) {
+      setImageOrder(cleanedOrder);
+    }
+  }, [allImages]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Render
+  |--------------------------------------------------------------------------
+  */
 
   return (
     <div className="space-y-8">
-      {/* CABECERA */}
-
       <div>
         <h2 className="text-xl font-semibold">Imágenes del producto</h2>
 
@@ -133,22 +239,11 @@ export default function ImageUploader({
         </p>
       </div>
 
-      {/* BOTÓN */}
-
       <UploadButton onSelect={handleSelect} />
 
-      {/* GRID */}
-
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext
-          items={allImages.map((img) => img.id)}
-          strategy={rectSortingStrategy}
-        >
-          <ImageGrid images={allImages} onDelete={handleDelete} />
-        </SortableContext>
+        <ImageGrid images={allImages} onDelete={handleDelete} />
       </DndContext>
-
-      {/* FOOTER */}
 
       <div className="text-sm text-gray-500">
         {allImages.length} imagen

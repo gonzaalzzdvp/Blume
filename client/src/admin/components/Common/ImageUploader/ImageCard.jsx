@@ -1,11 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faTrash,
   faStar,
   faGripVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function ImageCard({ image, index, onDelete }) {
+export default function ImageCard({
+  image,
+  index,
+  onDelete,
+  dragAttributes,
+  dragListeners,
+}) {
   const isMain = index === 0;
 
   const imageSrc = image.type === "existing" ? image.image : image.preview;
@@ -24,10 +31,8 @@ export default function ImageCard({ image, index, onDelete }) {
         duration-200
       "
     >
-      {/* Imagen */}
-
       <img
-        src={image.preview}
+        src={imageSrc}
         alt={`Producto ${index + 1}`}
         className="
           w-full
@@ -37,8 +42,6 @@ export default function ImageCard({ image, index, onDelete }) {
           pointer-events-none
         "
       />
-
-      {/* Principal */}
 
       {isMain && (
         <div
@@ -64,8 +67,6 @@ export default function ImageCard({ image, index, onDelete }) {
         </div>
       )}
 
-      {/* Nueva */}
-
       {image.type === "new" && (
         <div
           className="
@@ -85,9 +86,9 @@ export default function ImageCard({ image, index, onDelete }) {
         </div>
       )}
 
-      {/* Drag */}
-
       <div
+        {...dragAttributes}
+        {...dragListeners}
         className="
           absolute
           top-3
@@ -103,16 +104,19 @@ export default function ImageCard({ image, index, onDelete }) {
           justify-center
           text-gray-500
           cursor-grab
+          active:cursor-grabbing
+          z-10
         "
       >
         <FontAwesomeIcon icon={faGripVertical} />
       </div>
 
-      {/* Eliminar */}
-
       <button
         type="button"
-        onClick={onDelete}
+        onClick={(event) => {
+          event.stopPropagation();
+          onDelete();
+        }}
         className="
           absolute
           top-3
@@ -126,12 +130,11 @@ export default function ImageCard({ image, index, onDelete }) {
           hover:bg-red-50
           transition
           cursor-pointer
+          z-10
         "
       >
         <FontAwesomeIcon icon={faTrash} />
       </button>
-
-      {/* Footer */}
 
       <div
         className="

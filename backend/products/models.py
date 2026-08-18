@@ -48,7 +48,11 @@ class Product(models.Model):
         related_name="products"
     )
 
-    image = CloudinaryField("image")
+    image = CloudinaryField(
+        "image",
+        null=True,
+        blank=True,
+    )
 
     featured = models.BooleanField(default=False)
 

@@ -13,6 +13,7 @@ export default function CatalogSection() {
     volumen: "/categories/volume.png",
     rizos: "/categories/curls.png",
     violeta: "/categories/blonde.png",
+    "limited-kits": "/categories/limited-kits.png",
   };
 
   useEffect(() => {
@@ -43,32 +44,49 @@ export default function CatalogSection() {
         items-center
         py-12
         lg:py-0
+        mt-12
       "
     >
+      {/* TÍTULO */}
+
       <div className="w-full text-center mb-8">
-        <h2 className="text-(--blackBean) text-2xl sm:text-3xl lg:text-4xl uppercase">
+        <h2
+          className="
+            text-(--blackBean)
+            text-2xl
+            sm:text-3xl
+            lg:text-4xl
+            uppercase
+          "
+        >
           Comprar por <span className="font-clash-bold">categoría</span>
         </h2>
       </div>
 
+      {/* CATEGORÍAS */}
+
       <div
         className="
           w-full
+          max-w-5xl
           grid
           grid-cols-2
-          lg:flex
-          lg:flex-wrap
-          justify-center
+          md:grid-cols-3
+          gap-x-6
+          gap-y-10
+          md:gap-x-8
+          md:gap-y-12
+          lg:gap-x-10
+          lg:gap-y-14
+          justify-items-center
           items-center
-          gap-6
-          lg:gap-4
         "
       >
-        {categories.map((category, index) => (
+        {categories.map((category) => (
           <Link
             to={`/catalog?category=${category.slug}`}
             key={category.id}
-            className={`
+            className="
               flex
               flex-col
               justify-center
@@ -77,13 +95,8 @@ export default function CatalogSection() {
               lg:gap-4
               cursor-pointer
               group
-
-              ${
-                index === categories.length - 1
-                  ? "col-span-2 justify-self-center"
-                  : ""
-              }
-            `}
+              w-full
+            "
           >
             <div
               className="

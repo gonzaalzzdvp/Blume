@@ -4,10 +4,6 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 
   withCredentials: true,
-
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 let isRefreshing = false;
@@ -56,7 +52,10 @@ api.interceptors.response.use(
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
+          failedQueue.push({
+            resolve,
+            reject,
+          });
         }).then(() => api(originalRequest));
       }
 

@@ -1,14 +1,8 @@
-import {
-  SortableContext,
-  rectSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 
 import SortableImageCard from "./SortableImageCard";
 
-export default function ImageGrid({
-  images,
-  onDelete,
-}) {
+export default function ImageGrid({ images, onDelete }) {
   if (!images.length) {
     return (
       <div
@@ -25,13 +19,9 @@ export default function ImageGrid({
           bg-gray-50
         "
       >
-        <p className="text-lg font-medium">
-          No hay imágenes
-        </p>
+        <p className="text-lg font-medium">No hay imágenes</p>
 
-        <p className="text-sm mt-2">
-          Agrega imágenes para comenzar.
-        </p>
+        <p className="text-sm mt-2">Agrega imágenes para comenzar.</p>
       </div>
     );
   }
