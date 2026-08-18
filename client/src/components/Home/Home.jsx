@@ -11,14 +11,14 @@ const banners = [
   },
   {
     desktop: "/Home/banner-b.png",
-    tablet: "/Home/banner-a2.png",
-    mobile: "/Home/banner-a3.png",
+    tablet: "/Home/banner-b2.png",
+    mobile: "/Home/banner-b3.png",
     alt: "Banner promocional",
   },
   {
-    desktop: "/Home/banner-a.png",
-    tablet: "/Home/banner-a2.png",
-    mobile: "/Home/banner-a3.png",
+    desktop: "/Home/banner-c.png",
+    tablet: "/Home/banner-c2.png",
+    mobile: "/Home/banner-c3.png",
     alt: "Banner de productos",
   },
 ];

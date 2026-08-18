@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getFeaturedProducts } from "../../services/productService";
-import "../../Styles/BestSellers.css";
+import "../../Styles/bestSellers.css";
 
 const SLIDE_INTERVAL = 5000;
 const TRANSITION_DURATION = 700;
