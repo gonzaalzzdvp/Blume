@@ -251,7 +251,9 @@ export default function Sidebar({ menuOpen, setMenuOpen }) {
                     hover:text-(--blackBean)
                   "
                 >
-                  <span className="cursor-pointer">Más vendidos</span>
+                  <Link to="/catalog?featured=true">
+                    <span className="cursor-pointer">Más vendidos</span>
+                  </Link>
                 </div>
 
                 <div

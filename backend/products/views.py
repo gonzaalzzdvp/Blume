@@ -64,4 +64,4 @@ class FeaturedProductsView(generics.ListAPIView):
         return Product.objects.filter(
             featured=True,
             is_active=True,
-        ).order_by("-created_at")[:5]
+        ).order_by("-created_at")

@@ -12,22 +12,25 @@ export default function BestSellers() {
   const [isPaused, setIsPaused] = useState(false);
   const [visibleItems, setVisibleItems] = useState(4);
 
+  /*
+   * Obtener productos destacados
+   */
   useEffect(() => {
+    async function loadProducts() {
+      try {
+        const data = await getFeaturedProducts();
+
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     loadProducts();
   }, []);
 
-  async function loadProducts() {
-    try {
-      const data = await getFeaturedProducts();
-      setProducts(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   /*
-   * Determina cuántos productos se muestran
-   * dependiendo del tamaño de pantalla.
+   * Productos visibles según pantalla
    */
   useEffect(() => {
     const updateVisibleItems = () => {
@@ -50,8 +53,16 @@ export default function BestSellers() {
   }, []);
 
   /*
-   * Cantidad máxima de posiciones que puede recorrer
-   * el carrusel.
+   * Máxima posición posible.
+   *
+   * Con 9 productos y 4 visibles:
+   *
+   * 0 → 1 2 3 4
+   * 1 → 2 3 4 5
+   * 2 → 3 4 5 6
+   * 3 → 4 5 6 7
+   * 4 → 5 6 7 8
+   * 5 → 6 7 8 9
    */
   const maxIndex = Math.max(products.length - visibleItems, 0);
 
@@ -65,6 +76,10 @@ export default function BestSellers() {
 
     const interval = setInterval(() => {
       setCurrentIndex((current) => {
+        /*
+         * Al llegar al último desplazamiento,
+         * regresamos al primero.
+         */
         if (current >= maxIndex) {
           return 0;
         }
@@ -77,20 +92,19 @@ export default function BestSellers() {
   }, [isPaused, products.length, visibleItems, maxIndex]);
 
   /*
-   * Ajustamos el índice cuando cambia el tamaño
+   * Corregir índice al cambiar el tamaño
    * de pantalla.
    */
   useEffect(() => {
-    if (currentIndex > maxIndex) {
-      setCurrentIndex(maxIndex);
-    }
-  }, [currentIndex, maxIndex]);
+    setCurrentIndex((current) => Math.min(current, maxIndex));
+  }, [maxIndex]);
 
   /*
-   * Navegación mediante los puntos.
+   * Navegación manual
    */
   const goToSlide = (index) => {
-    setCurrentIndex(index);
+    setCurrentIndex(Math.min(index, maxIndex));
+
     setIsPaused(true);
 
     setTimeout(() => {
@@ -98,17 +112,19 @@ export default function BestSellers() {
     }, 100);
   };
 
-  /*
-   * Si no hay productos, no renderizamos la sección.
-   */
   if (!products.length) {
     return null;
   }
 
   /*
-   * Cantidad de posiciones disponibles.
+   * Ancho de cada producto dentro del track.
    */
-  const slideCount = maxIndex + 1;
+  const slideWidth = 100 / products.length;
+
+  /*
+   * Movimiento de un producto.
+   */
+  const translateX = currentIndex * slideWidth;
 
   return (
     <section
@@ -125,9 +141,7 @@ export default function BestSellers() {
           className="best-sellers__track"
           style={{
             width: `${(products.length / visibleItems) * 100}%`,
-            transform: `translateX(-${
-              currentIndex * (100 / products.length)
-            }%)`,
+            transform: `translateX(-${translateX}%)`,
             transition: `transform ${TRANSITION_DURATION}ms cubic-bezier(0.65, 0, 0.35, 1)`,
           }}
         >
@@ -136,7 +150,7 @@ export default function BestSellers() {
               key={product.id}
               className="best-sellers__slide"
               style={{
-                width: `${100 / products.length}%`,
+                width: `${slideWidth}%`,
               }}
             >
               <Link
@@ -169,15 +183,18 @@ export default function BestSellers() {
         </ul>
       </div>
 
-      {/* Controles */}
-      {slideCount > 1 && (
+      {/* ==========================================
+          CONTROLES
+          ========================================== */}
+
+      {products.length > visibleItems && (
         <div className="best-sellers__dots">
-          {Array.from({ length: slideCount }).map((_, index) => (
+          {products.slice(0, maxIndex + 1).map((_, index) => (
             <button
               key={index}
               type="button"
               onClick={() => goToSlide(index)}
-              aria-label={`Ir a productos ${index + 1}`}
+              aria-label={`Ir a posición ${index + 1}`}
               aria-current={currentIndex === index ? "true" : undefined}
               className={`best-sellers__dot ${
                 currentIndex === index ? "best-sellers__dot--active" : ""

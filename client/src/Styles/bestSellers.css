@@ -6,7 +6,6 @@
 
   display: flex;
   flex-direction: column;
-
   justify-content: center;
   align-items: center;
 
@@ -15,20 +14,12 @@
   overflow: hidden;
 }
 
-/* ==========================================
-   VIEWPORT
-   ========================================== */
-
 .best-sellers__viewport {
   width: 100%;
   max-width: 1200px;
 
   overflow: hidden;
 }
-
-/* ==========================================
-   TRACK
-   ========================================== */
 
 .best-sellers__track {
   display: flex;
@@ -42,40 +33,28 @@
   will-change: transform;
 }
 
-/* ==========================================
-   SLIDE
-   ========================================== */
-
 .best-sellers__slide {
   flex: 0 0 auto;
 
   display: flex;
-
   justify-content: center;
 
   padding: 0 0.5rem;
 }
-
-/* ==========================================
-   PRODUCT
-   ========================================== */
 
 .best-sellers__product {
   width: 100%;
 
   display: flex;
   flex-direction: column;
-
   align-items: center;
 
   gap: 0.75rem;
 }
 
-/* ==========================================
-   IMAGE
-   ========================================== */
-
 .best-sellers__image {
+  display: block;
+
   width: 100%;
   aspect-ratio: 1 / 1;
 
@@ -83,10 +62,6 @@
 
   border-radius: 1rem;
 }
-
-/* ==========================================
-   INFO
-   ========================================== */
 
 .best-sellers__info {
   width: 100%;
@@ -99,13 +74,8 @@
   text-align: center;
 }
 
-/* ==========================================
-   DOTS
-   ========================================== */
-
 .best-sellers__dots {
   display: flex;
-
   align-items: center;
   justify-content: center;
 
@@ -117,7 +87,6 @@
   height: 9px;
 
   padding: 0;
-
   border: 0;
 
   border-radius: 999px;
@@ -142,10 +111,6 @@
   transform: scale(1.15);
 }
 
-/* ==========================================
-   MOBILE
-   ========================================== */
-
 @media (max-width: 639px) {
   .best-sellers {
     padding: 3rem 1rem;
@@ -157,19 +122,11 @@
   }
 }
 
-/* ==========================================
-   TABLET
-   ========================================== */
-
 @media (min-width: 640px) and (max-width: 1023px) {
   .best-sellers {
     padding: 3rem 2rem;
   }
 }
-
-/* ==========================================
-   DESKTOP
-   ========================================== */
 
 @media (min-width: 1024px) {
   .best-sellers {

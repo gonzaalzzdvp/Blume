@@ -1,6 +1,10 @@
 import api from "./api";
 
-export const getProducts = async (search = "", category = null) => {
+export const getProducts = async (
+  search = "",
+  category = null,
+  featured = false,
+) => {
   const params = {};
 
   if (search) {
@@ -9,6 +13,10 @@ export const getProducts = async (search = "", category = null) => {
 
   if (category) {
     params.category = category;
+  }
+
+  if (featured) {
+    params.featured = true;
   }
 
   const response = await api.get("/products/", {
