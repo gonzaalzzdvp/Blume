@@ -11,12 +11,15 @@ export const getProducts = async (
     params.search = search;
   }
 
-  if (category) {
-    params.category = category;
-  }
-
+  /*
+   * Si featured está activo, el backend espera:
+   *
+   * category=featured
+   */
   if (featured) {
-    params.featured = true;
+    params.category = "featured";
+  } else if (category) {
+    params.category = category;
   }
 
   const response = await api.get("/products/", {
