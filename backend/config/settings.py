@@ -36,10 +36,14 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 COOKIE_SECURE = not DEBUG
 COOKIE_SAMESITE = "None" if not DEBUG else "Lax"
 
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1,.onrender.com",
-).split(",")
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1",
+    ).split(",")
+    if host.strip()
+]
 
 # Application definition
 
