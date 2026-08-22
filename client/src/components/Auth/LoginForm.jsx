@@ -163,10 +163,10 @@ export default function LoginForm() {
         disabled={isLoading}
         className="
           w-80
-          bg-(--pinkRose)
           text-white
           py-3
           rounded-lg
+          bg-(--citron)
           hover:bg-(--blackBean)
           cursor-pointer
           font-ranade-regular

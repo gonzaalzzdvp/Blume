@@ -58,6 +58,11 @@ export function CartProvider({ children }) {
   };
 
   const addToCart = async (product, quantity = 1) => {
+    if (!authenticated) {
+      toast.error("Inicia sesión para agregar productos al carrito.");
+      return;
+    }
+
     try {
       const data = await addCartItem(product.id, quantity);
 

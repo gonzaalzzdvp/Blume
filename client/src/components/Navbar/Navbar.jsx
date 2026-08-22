@@ -5,7 +5,7 @@ import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 
 import Slider from "./Slider";
-import Sidebar from "./Sidebar"; // Importamos el nuevo aside
+import Sidebar from "./Sidebar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,6 +17,7 @@ import {
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showPromo, setShowPromo] = useState(true);
+
   const { cartCount } = useCart();
   const { user } = useAuth();
 
@@ -38,6 +39,7 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -67,33 +69,73 @@ export default function Navbar() {
         `}
       >
         {/* Botón para abrir el Sidebar */}
-        <button onClick={() => setMenuOpen(true)}>
+        <button type="button" onClick={() => setMenuOpen(true)}>
           <FontAwesomeIcon
             icon={faBars}
             className="text-2xl text-(--blackBean) hover:text-(--pinkRose) cursor-pointer"
           />
         </button>
 
+        {/* Logo */}
         <Link to="/">
-          <img src="/Logo/BlumeLogo.png" alt="Blume Care Logo" className="h-10 md:h-12 lg:h-14"/>
+          <img
+            src="/Logo/BlumeLogo.png"
+            alt="Blume Care Logo"
+            className="h-10 md:h-12 lg:h-14"
+          />
         </Link>
 
-        <div className="flex justify-center items-center gap-4 md:gap-10">
+        {/* Acciones */}
+        <div className="flex justify-center items-center gap-4 md:gap-8">
+          {/* Usuario */}
+          {user && (
+            <p
+              className="
+                hidden
+                sm:flex
+                flex-col
+                items-center 
+                text-sm
+                md:text-center
+                font-ranade-bold
+                text-(--blackBean)
+              "
+            >
+              <span>Hola</span>
+              <span>{user.first_name}</span>
+            </p>
+          )}
+
+          {/* Admin */}
           {user?.role === "admin" && (
             <Link
               to="/admin"
-              className="flex flex-col justify-center items-center gap-1 text-(--blackBean) hover:text-(--pinkRose)"
+              className="
+                flex
+                flex-col
+                justify-center
+                items-center
+                gap-1
+                text-(--blackBean)
+                hover:text-(--pinkRose)
+              "
             >
-              <FontAwesomeIcon icon={faGears} className=" text-xl" />
+              <FontAwesomeIcon icon={faGears} className="text-xl" />
+
               <span className="hidden md:flex text-sm">Admin Panel</span>
             </Link>
           )}
 
+          {/* Carrito */}
           <Link to="/cart">
             <div className="relative">
               <FontAwesomeIcon
                 icon={faBagShopping}
-                className="text-2xl text-(--blackBean) hover:text-(--pinkRose)"
+                className="
+                  text-2xl
+                  text-(--blackBean)
+                  hover:text-(--pinkRose)
+                "
               />
 
               {cartCount > 0 && (

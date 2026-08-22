@@ -25,9 +25,17 @@ export default function CatalogSection() {
       const data = await getCategories();
 
       setCategories(data);
-      completeTask("categories");
     } catch (error) {
       console.error(error);
+    } finally {
+      /*
+       * Le indicamos al LoadingContext que la carga
+       * de categorías terminó.
+       *
+       * Esto ocurre tanto si la petición funciona
+       * como si ocurre un error.
+       */
+      completeTask("categories");
     }
   }
 

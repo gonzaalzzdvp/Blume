@@ -7,7 +7,8 @@ export default function ThankYouPage() {
   return (
     <main
       className="
-        min-h-[calc(100vh-80px)]
+        min-h-[calc(100vh-88px)]
+        mt-8
         flex
         items-center
         justify-center
@@ -86,9 +87,9 @@ export default function ThankYouPage() {
             py-3.5
             sm:py-4
             rounded-xl
-            bg-(--pinkRose)
+            bg-(--orangeBlume)
             text-white
-            hover:bg-(--orangeBlume)
+            hover:bg-(--blackBean)
             font-medium
             text-base
             sm:text-lg

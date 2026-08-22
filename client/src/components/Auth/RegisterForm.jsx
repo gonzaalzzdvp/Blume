@@ -300,7 +300,7 @@ export default function RegisterForm() {
         disabled={isLoading}
         className="
           w-full
-          bg-(--pinkRose)
+          bg-(--citron)
           hover:bg-(--blackBean)
           text-white
           py-3

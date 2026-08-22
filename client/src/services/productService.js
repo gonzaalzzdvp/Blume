@@ -11,11 +11,6 @@ export const getProducts = async (
     params.search = search;
   }
 
-  /*
-   * Si featured está activo, el backend espera:
-   *
-   * category=featured
-   */
   if (featured) {
     params.category = "featured";
   } else if (category) {

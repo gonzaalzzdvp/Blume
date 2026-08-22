@@ -25,8 +25,9 @@ const banners = [
 
 const SLIDE_INTERVAL = 4500;
 const TRANSITION_DURATION = 800;
+const SWIPE_THRESHOLD = 50;
 
-function BannerImage({ banner, priority = false }) {
+function BannerImage({ banner }) {
   return (
     <picture className="home-banner__picture">
       <source media="(min-width: 1024px)" srcSet={banner.desktop} />
@@ -37,7 +38,8 @@ function BannerImage({ banner, priority = false }) {
         src={banner.mobile}
         alt={banner.alt}
         className="home-banner__image"
-        loading={priority ? "eager" : "lazy"}
+        loading="eager"
+        draggable="false"
       />
     </picture>
   );
@@ -45,7 +47,7 @@ function BannerImage({ banner, priority = false }) {
 
 export default function Home() {
   /*
-   * Agregamos clones al principio y al final:
+   * Carrusel infinito:
    *
    * C | A | B | C | A
    * ↑               ↑
@@ -54,25 +56,54 @@ export default function Home() {
   const slides = [banners[banners.length - 1], ...banners, banners[0]];
 
   /*
-   * Empezamos en 1 porque la posición 0 es el clon de C.
+   * A = 1
+   * B = 2
+   * C = 3
    */
   const [currentIndex, setCurrentIndex] = useState(1);
 
-  /*
-   * Controla si el carrusel está animando.
-   */
   const [isTransitioning, setIsTransitioning] = useState(true);
 
-  /*
-   * Pausa el autoplay cuando el usuario pasa el mouse.
-   */
   const [isPaused, setIsPaused] = useState(false);
 
   /*
-   * Evita que el efecto de autoplay se ejecute
-   * mientras hacemos el reposicionamiento invisible.
+   * Referencia para evitar múltiples movimientos
+   * mientras una transición está ocurriendo.
    */
-  const isResetting = useRef(false);
+  const isAnimatingRef = useRef(false);
+
+  /*
+   * Touch
+   */
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+
+  /*
+   * Wheel
+   */
+  const wheelLocked = useRef(false);
+
+  /*
+   * ==========================================
+   * PAUSAR CUANDO LA PESTAÑA NO ESTÁ VISIBLE
+   * ==========================================
+   */
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setIsPaused(true);
+      } else {
+        setIsPaused(false);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
 
   /*
    * ==========================================
@@ -81,14 +112,46 @@ export default function Home() {
    */
 
   useEffect(() => {
-    if (isPaused || isResetting.current) return;
+    if (isPaused || document.hidden) {
+      return;
+    }
 
     const interval = setInterval(() => {
+      if (isAnimatingRef.current) {
+        return;
+      }
+
+      isAnimatingRef.current = true;
+
       setCurrentIndex((current) => current + 1);
     }, SLIDE_INTERVAL);
 
     return () => clearInterval(interval);
   }, [isPaused]);
+
+  /*
+   * ==========================================
+   * NAVEGACIÓN
+   * ==========================================
+   */
+
+  const nextSlide = () => {
+    if (isAnimatingRef.current) {
+      return;
+    }
+
+    isAnimatingRef.current = true;
+    setCurrentIndex((current) => current + 1);
+  };
+
+  const previousSlide = () => {
+    if (isAnimatingRef.current) {
+      return;
+    }
+
+    isAnimatingRef.current = true;
+    setCurrentIndex((current) => current - 1);
+  };
 
   /*
    * ==========================================
@@ -104,84 +167,181 @@ export default function Home() {
      *                 ↑
      */
     if (currentIndex === slides.length - 1) {
-      isResetting.current = true;
-
-      /*
-       * Quitamos la transición.
-       */
       setIsTransitioning(false);
 
-      /*
-       * Movemos instantáneamente al A original.
-       */
       setCurrentIndex(1);
 
-      /*
-       * Esperamos un frame para volver a activar
-       * la transición.
-       */
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setIsTransitioning(true);
-          isResetting.current = false;
+          isAnimatingRef.current = false;
         });
       });
+
+      return;
     }
 
     /*
-     * Si en algún momento navegamos hacia atrás
-     * hasta el clon de C.
+     * Llegamos al clon de C.
+     *
+     * C | A | B | C | A
+     * ↑
      */
     if (currentIndex === 0) {
-      isResetting.current = true;
-
       setIsTransitioning(false);
+
       setCurrentIndex(banners.length);
 
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setIsTransitioning(true);
-          isResetting.current = false;
+          isAnimatingRef.current = false;
         });
       });
+
+      return;
     }
+
+    /*
+     * Transición normal terminada.
+     */
+    isAnimatingRef.current = false;
   };
 
   /*
    * ==========================================
-   * CONTROLES
+   * DOTS
    * ==========================================
    */
 
   const goToBanner = (index) => {
-    /*
-     * Los índices reales son:
-     *
-     * A = 1
-     * B = 2
-     * C = 3
-     */
+    if (isAnimatingRef.current) {
+      return;
+    }
+
+    isAnimatingRef.current = true;
+
     setCurrentIndex(index + 1);
 
     /*
-     * Reiniciamos el ciclo del autoplay.
+     * Pausa breve para que el usuario pueda
+     * interactuar sin que el autoplay compita
+     * inmediatamente con el clic.
      */
     setIsPaused(true);
 
     setTimeout(() => {
       setIsPaused(false);
-    }, 100);
+    }, 1000);
   };
 
   /*
-   * Índice visual para saber qué punto activar.
-   *
-   * currentIndex:
-   * 1 → A
-   * 2 → B
-   * 3 → C
-   * 4 → A(clon)
+   * ==========================================
+   * WHEEL / TRACKPAD
+   * ==========================================
    */
+
+  const handleWheel = (event) => {
+    /*
+     * Evitamos que pequeños movimientos del trackpad
+     * disparen varias imágenes seguidas.
+     */
+    if (wheelLocked.current) {
+      return;
+    }
+
+    /*
+     * Solo nos interesa el movimiento vertical u
+     * horizontal más significativo.
+     */
+    const delta =
+      Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX
+        : event.deltaY;
+
+    /*
+     * Si el movimiento es demasiado pequeño,
+     * no hacemos nada.
+     */
+    if (Math.abs(delta) < 20) {
+      return;
+    }
+
+    wheelLocked.current = true;
+
+    if (delta > 0) {
+      nextSlide();
+    } else {
+      previousSlide();
+    }
+
+    /*
+     * Pequeño bloqueo para que un solo gesto
+     * del trackpad corresponda a un banner.
+     */
+    setTimeout(() => {
+      wheelLocked.current = false;
+    }, TRANSITION_DURATION);
+  };
+
+  /*
+   * ==========================================
+   * TOUCH
+   * ==========================================
+   */
+
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+
+    touchStartX.current = touch.clientX;
+    touchStartY.current = touch.clientY;
+  };
+
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null || touchStartY.current === null) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+
+    const deltaX = touch.clientX - touchStartX.current;
+
+    const deltaY = touch.clientY - touchStartY.current;
+
+    /*
+     * Limpiamos referencias.
+     */
+    touchStartX.current = null;
+    touchStartY.current = null;
+
+    /*
+     * Si el movimiento vertical es mayor,
+     * dejamos que la página haga scroll normalmente.
+     */
+    if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      return;
+    }
+
+    /*
+     * El swipe debe superar cierto umbral.
+     */
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD) {
+      return;
+    }
+
+    if (deltaX < 0) {
+      nextSlide();
+    } else {
+      previousSlide();
+    }
+  };
+
+  /*
+   * ==========================================
+   * ÍNDICE DEL DOT ACTIVO
+   * ==========================================
+   */
+
   const activeDot =
     currentIndex === 0
       ? banners.length - 1
@@ -194,6 +354,9 @@ export default function Home() {
       className="home-banner"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <Link to="/catalog" className="home-banner__link">
         <div
@@ -215,16 +378,13 @@ export default function Home() {
                 width: `${100 / slides.length}%`,
               }}
             >
-              <BannerImage banner={banner} priority={index <= 1} />
+              <BannerImage banner={banner} />
             </div>
           ))}
         </div>
       </Link>
 
-      {/* ==========================================
-          CONTROLES INFERIORES
-          ========================================== */}
-
+      {/* Controles inferiores */}
       <div className="home-banner__dots">
         {banners.map((_, index) => (
           <button
@@ -233,7 +393,16 @@ export default function Home() {
             className={`home-banner__dot ${
               activeDot === index ? "home-banner__dot--active" : ""
             }`}
-            onClick={() => goToBanner(index)}
+            onClick={(event) => {
+              /*
+               * Evita que el click del dot
+               * navegue al catálogo.
+               */
+              event.preventDefault();
+              event.stopPropagation();
+
+              goToBanner(index);
+            }}
             aria-label={`Ir al banner ${index + 1}`}
             aria-current={activeDot === index ? "true" : undefined}
           />

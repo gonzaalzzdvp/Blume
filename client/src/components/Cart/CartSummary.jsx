@@ -66,8 +66,8 @@ export default function CartSummary({ onCheckout }) {
           flex
           items-center
           justify-center
-          bg-(--pinkRose)
-          hover:bg-(--citron)
+          bg-(--citron)
+          hover:bg-(--blackBean)
           text-white
           rounded-xl
           font-ranade-regular

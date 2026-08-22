@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { getFeaturedProducts } from "../../services/productService";
+import { useLoading } from "../../context/LoadingContext";
+
 import "../../Styles/bestSellers.css";
 
 const SLIDE_INTERVAL = 5000;
 const TRANSITION_DURATION = 700;
+const SWIPE_THRESHOLD = 50;
 
 export default function BestSellers() {
   const [products, setProducts] = useState([]);
@@ -12,9 +15,14 @@ export default function BestSellers() {
   const [isPaused, setIsPaused] = useState(false);
   const [visibleItems, setVisibleItems] = useState(4);
 
-  /*
-   * Obtener productos destacados
-   */
+  const { completeTask } = useLoading();
+
+  const isAnimatingRef = useRef(false);
+  const wheelLocked = useRef(false);
+
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+
   useEffect(() => {
     async function loadProducts() {
       try {
@@ -23,15 +31,20 @@ export default function BestSellers() {
         setProducts(data);
       } catch (error) {
         console.error(error);
+      } finally {
+        completeTask("featuredProducts");
       }
     }
 
     loadProducts();
-  }, []);
+  }, [completeTask]);
 
   /*
-   * Productos visibles según pantalla
+   * ==========================================
+   * PRODUCTOS VISIBLES
+   * ==========================================
    */
+
   useEffect(() => {
     const updateVisibleItems = () => {
       if (window.innerWidth < 640) {
@@ -53,9 +66,11 @@ export default function BestSellers() {
   }, []);
 
   /*
-   * Máxima posición posible.
+   * ==========================================
+   * MÁXIMO ÍNDICE
+   * ==========================================
    *
-   * Con 9 productos y 4 visibles:
+   * 9 productos / 4 visibles:
    *
    * 0 → 1 2 3 4
    * 1 → 2 3 4 5
@@ -64,22 +79,28 @@ export default function BestSellers() {
    * 4 → 5 6 7 8
    * 5 → 6 7 8 9
    */
+
   const maxIndex = Math.max(products.length - visibleItems, 0);
 
   /*
-   * Autoplay
+   * ==========================================
+   * AUTOPLAY
+   * ==========================================
    */
+
   useEffect(() => {
     if (isPaused || products.length <= visibleItems) {
       return;
     }
 
     const interval = setInterval(() => {
+      if (isAnimatingRef.current) {
+        return;
+      }
+
+      isAnimatingRef.current = true;
+
       setCurrentIndex((current) => {
-        /*
-         * Al llegar al último desplazamiento,
-         * regresamos al primero.
-         */
         if (current >= maxIndex) {
           return 0;
         }
@@ -92,32 +113,207 @@ export default function BestSellers() {
   }, [isPaused, products.length, visibleItems, maxIndex]);
 
   /*
-   * Corregir índice al cambiar el tamaño
-   * de pantalla.
+   * ==========================================
+   * AJUSTAR ÍNDICE
+   * ==========================================
    */
+
   useEffect(() => {
     setCurrentIndex((current) => Math.min(current, maxIndex));
+
+    isAnimatingRef.current = false;
   }, [maxIndex]);
 
   /*
-   * Navegación manual
+   * ==========================================
+   * SIGUIENTE / ANTERIOR
+   * ==========================================
    */
+
+  const nextSlide = () => {
+    if (isAnimatingRef.current || products.length <= visibleItems) {
+      return;
+    }
+
+    isAnimatingRef.current = true;
+
+    setCurrentIndex((current) => {
+      if (current >= maxIndex) {
+        return 0;
+      }
+
+      return current + 1;
+    });
+  };
+
+  const previousSlide = () => {
+    if (isAnimatingRef.current || products.length <= visibleItems) {
+      return;
+    }
+
+    isAnimatingRef.current = true;
+
+    setCurrentIndex((current) => {
+      if (current <= 0) {
+        return maxIndex;
+      }
+
+      return current - 1;
+    });
+  };
+
+  /*
+   * ==========================================
+   * TRANSICIÓN TERMINADA
+   * ==========================================
+   */
+
+  const handleTransitionEnd = () => {
+    isAnimatingRef.current = false;
+  };
+
+  /*
+   * ==========================================
+   * DOTS
+   * ==========================================
+   */
+
   const goToSlide = (index) => {
+    if (isAnimatingRef.current) {
+      return;
+    }
+
     setCurrentIndex(Math.min(index, maxIndex));
 
+    isAnimatingRef.current = true;
+
+    /*
+     * Pausa breve después de la interacción
+     * manual para no competir con el autoplay.
+     */
     setIsPaused(true);
 
     setTimeout(() => {
       setIsPaused(false);
-    }, 100);
+    }, 1000);
   };
+
+  /*
+   * ==========================================
+   * SCROLL / WHEEL
+   * ==========================================
+   */
+
+  const handleWheel = (event) => {
+    if (products.length <= visibleItems || wheelLocked.current) {
+      return;
+    }
+
+    /*
+     * Determinamos si el usuario está haciendo
+     * scroll horizontal o vertical.
+     *
+     * Si el movimiento horizontal es mayor,
+     * usamos deltaX.
+     */
+    const delta =
+      Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX
+        : event.deltaY;
+
+    /*
+     * Ignoramos movimientos mínimos del trackpad.
+     */
+    if (Math.abs(delta) < 20) {
+      return;
+    }
+
+    wheelLocked.current = true;
+
+    if (delta > 0) {
+      nextSlide();
+    } else {
+      previousSlide();
+    }
+
+    /*
+     * Un gesto = un producto.
+     */
+    setTimeout(() => {
+      wheelLocked.current = false;
+    }, TRANSITION_DURATION);
+  };
+
+  /*
+   * ==========================================
+   * TOUCH START
+   * ==========================================
+   */
+
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+
+    touchStartX.current = touch.clientX;
+    touchStartY.current = touch.clientY;
+  };
+
+  /*
+   * ==========================================
+   * TOUCH END
+   * ==========================================
+   */
+
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null || touchStartY.current === null) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+
+    const deltaX = touch.clientX - touchStartX.current;
+
+    const deltaY = touch.clientY - touchStartY.current;
+
+    /*
+     * Limpiar referencias.
+     */
+    touchStartX.current = null;
+    touchStartY.current = null;
+
+    /*
+     * Si el movimiento vertical es mayor,
+     * dejamos que la página haga scroll normalmente.
+     */
+    if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      return;
+    }
+
+    /*
+     * El swipe debe superar el umbral.
+     */
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD) {
+      return;
+    }
+
+    if (deltaX < 0) {
+      nextSlide();
+    } else {
+      previousSlide();
+    }
+  };
+
+  /*
+   * ==========================================
+   * RENDER
+   * ==========================================
+   */
 
   if (!products.length) {
     return null;
   }
 
   /*
-   * Ancho de cada producto dentro del track.
+   * Cada producto ocupa una fracción del track.
    */
   const slideWidth = 100 / products.length;
 
@@ -131,6 +327,9 @@ export default function BestSellers() {
       className="best-sellers"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <h2 className="text-(--orangeBlume) text-2xl sm:text-3xl lg:text-4xl uppercase text-center">
         Nuestros Productos <span className="font-clash-bold">Más vendidos</span>
@@ -144,6 +343,7 @@ export default function BestSellers() {
             transform: `translateX(-${translateX}%)`,
             transition: `transform ${TRANSITION_DURATION}ms cubic-bezier(0.65, 0, 0.35, 1)`,
           }}
+          onTransitionEnd={handleTransitionEnd}
         >
           {products.map((product) => (
             <li
@@ -160,6 +360,7 @@ export default function BestSellers() {
                 <img
                   src={product.image_url}
                   alt={product.title}
+                  draggable="false"
                   className="
                     best-sellers__image
                     transition-transform
@@ -183,22 +384,22 @@ export default function BestSellers() {
         </ul>
       </div>
 
-      {/* ==========================================
-          CONTROLES
-          ========================================== */}
-
+      {/* Controles inferiores */}
       {products.length > visibleItems && (
         <div className="best-sellers__dots">
-          {products.slice(0, maxIndex + 1).map((_, index) => (
+          {Array.from({
+            length: maxIndex + 1,
+          }).map((_, index) => (
             <button
               key={index}
               type="button"
               onClick={() => goToSlide(index)}
               aria-label={`Ir a posición ${index + 1}`}
               aria-current={currentIndex === index ? "true" : undefined}
-              className={`best-sellers__dot ${
-                currentIndex === index ? "best-sellers__dot--active" : ""
-              }`}
+              className={`
+                best-sellers__dot
+                ${currentIndex === index ? "best-sellers__dot--active" : ""}
+              `}
             />
           ))}
         </div>

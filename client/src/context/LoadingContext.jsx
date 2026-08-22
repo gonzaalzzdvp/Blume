@@ -14,6 +14,7 @@ export function LoadingProvider({ children }) {
     app: false,
     auth: false,
     categories: false,
+    featuredProducts: false,
     fonts: false,
   });
 
@@ -22,10 +23,20 @@ export function LoadingProvider({ children }) {
   });
 
   const completeTask = useCallback((task) => {
-    setTasks((prev) => ({
-      ...prev,
-      [task]: true,
-    }));
+    setTasks((prev) => {
+      /*
+       * Evitamos actualizar el estado si la tarea
+       * ya estaba completada.
+       */
+      if (prev[task]) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [task]: true,
+      };
+    });
   }, []);
 
   const loading = useMemo(() => {

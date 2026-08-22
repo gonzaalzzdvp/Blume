@@ -64,7 +64,7 @@ export default function CartItem({ item }) {
               -
             </button>
 
-            <span className="font-semibold text-sm sm:text-base">
+            <span className="font-semibold text-sm sm:text-base text-(--blackBean)">
               {item.quantity}
             </span>
 

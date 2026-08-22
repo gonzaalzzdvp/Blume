@@ -20,8 +20,8 @@ export default function EmptyCart() {
         to="/catalog"
         className="
           mt-8
-          bg-(--pinkRose)
-          hover:bg-(--citron)
+          bg-(--citron)
+          hover:bg-(--blackBean)
           text-white
           px-6
           py-3

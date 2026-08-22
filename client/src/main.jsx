@@ -17,10 +17,14 @@ createRoot(document.getElementById("root")).render(
         <CartProvider>
           <App />
           <Toaster
-            position="bottom-center"
+            position="top-right"
             reverseOrder={false}
             toastOptions={{
               duration: 3000,
+            }}
+            containerStyle={{
+              top: "100px",
+              right: "20px",
             }}
           />
         </CartProvider>
