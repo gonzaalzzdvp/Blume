@@ -158,11 +158,11 @@ export default function ProductDetail() {
             </div>
 
             {/* Imagen principal */}
-            <div className="w-full max-w-sm md:w-80 flex justify-center">
+            <div className="w-full max-w-sm md:w-100 md:h-100 flex justify-center">
               <img
                 src={selectedImage}
                 alt={product.title}
-                className="w-full aspect-square md:w-80 md:h-80 object-cover rounded-lg"
+                className="w-full aspect-square md:w-100 md:h-100 object-cover rounded-lg"
               />
             </div>
           </div>
