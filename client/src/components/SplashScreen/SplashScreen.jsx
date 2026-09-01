@@ -1,12 +1,7 @@
-import { useEffect, useState } from "react";
-import { useLoading } from "../../context/LoadingContext";
-
-import "../../Styles/SplashScreen.css";
-
 export default function SplashScreen() {
   const { loading, hasShownSplash } = useLoading();
 
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(!hasShownSplash);
 
   useEffect(() => {
     if (!loading) {
@@ -18,8 +13,7 @@ export default function SplashScreen() {
     }
   }, [loading]);
 
-  if (!visible) return null;
-  if (hasShownSplash) return null;
+  if (!visible || hasShownSplash) return null;
 
   return (
     <div className={`splash-screen ${loading ? "show" : "hide"}`}>

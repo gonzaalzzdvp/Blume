@@ -13,8 +13,6 @@ export function LoadingProvider({ children }) {
   const [tasks, setTasks] = useState({
     app: false,
     auth: false,
-    categories: false,
-    featuredProducts: false,
     fonts: false,
   });
 
@@ -24,10 +22,6 @@ export function LoadingProvider({ children }) {
 
   const completeTask = useCallback((task) => {
     setTasks((prev) => {
-      /*
-       * Evitamos actualizar el estado si la tarea
-       * ya estaba completada.
-       */
       if (prev[task]) {
         return prev;
       }
