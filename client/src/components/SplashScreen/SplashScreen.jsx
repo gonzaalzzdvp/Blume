@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+import { useLoading } from "../../context/LoadingContext";
+import "../../Styles/SplashScreen.css"
+
 export default function SplashScreen() {
   const { loading, hasShownSplash } = useLoading();
 
@@ -18,7 +22,7 @@ export default function SplashScreen() {
   return (
     <div className={`splash-screen ${loading ? "show" : "hide"}`}>
       <div className="logo-container">
-        <img src="/Logo/Blume2.png" alt="Blume" className="logo" />
+        <img src="/Logo/Blume2.png" alt="Blume" className="w-30" />
 
         <h1 className="text-2xl text-(--pinkRose) uppercase font-clash-bold">
           BLUME
