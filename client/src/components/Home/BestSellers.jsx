@@ -43,12 +43,16 @@ export default function BestSellers() {
    * ==========================================
    * PRODUCTOS VISIBLES
    * ==========================================
+   *
+   * Mobile: 1 producto
+   * Tablet: 3 productos
+   * Desktop: 4 productos
    */
 
   useEffect(() => {
     const updateVisibleItems = () => {
       if (window.innerWidth < 640) {
-        setVisibleItems(2);
+        setVisibleItems(1);
       } else if (window.innerWidth < 1024) {
         setVisibleItems(3);
       } else {
@@ -78,6 +82,14 @@ export default function BestSellers() {
    * 3 → 4 5 6 7
    * 4 → 5 6 7 8
    * 5 → 6 7 8 9
+   *
+   * 9 productos / 1 visible:
+   *
+   * 0 → 1
+   * 1 → 2
+   * 2 → 3
+   * ...
+   * 8 → 9
    */
 
   const maxIndex = Math.max(products.length - visibleItems, 0);
@@ -191,6 +203,7 @@ export default function BestSellers() {
      * Pausa breve después de la interacción
      * manual para no competir con el autoplay.
      */
+
     setIsPaused(true);
 
     setTimeout(() => {
@@ -216,6 +229,7 @@ export default function BestSellers() {
      * Si el movimiento horizontal es mayor,
      * usamos deltaX.
      */
+
     const delta =
       Math.abs(event.deltaX) > Math.abs(event.deltaY)
         ? event.deltaX
@@ -224,6 +238,7 @@ export default function BestSellers() {
     /*
      * Ignoramos movimientos mínimos del trackpad.
      */
+
     if (Math.abs(delta) < 20) {
       return;
     }
@@ -239,6 +254,7 @@ export default function BestSellers() {
     /*
      * Un gesto = un producto.
      */
+
     setTimeout(() => {
       wheelLocked.current = false;
     }, TRANSITION_DURATION);
@@ -277,6 +293,7 @@ export default function BestSellers() {
     /*
      * Limpiar referencias.
      */
+
     touchStartX.current = null;
     touchStartY.current = null;
 
@@ -284,6 +301,7 @@ export default function BestSellers() {
      * Si el movimiento vertical es mayor,
      * dejamos que la página haga scroll normalmente.
      */
+
     if (Math.abs(deltaY) > Math.abs(deltaX)) {
       return;
     }
@@ -291,6 +309,7 @@ export default function BestSellers() {
     /*
      * El swipe debe superar el umbral.
      */
+
     if (Math.abs(deltaX) < SWIPE_THRESHOLD) {
       return;
     }
@@ -315,11 +334,13 @@ export default function BestSellers() {
   /*
    * Cada producto ocupa una fracción del track.
    */
+
   const slideWidth = 100 / products.length;
 
   /*
    * Movimiento de un producto.
    */
+
   const translateX = currentIndex * slideWidth;
 
   return (
@@ -332,7 +353,8 @@ export default function BestSellers() {
       onTouchEnd={handleTouchEnd}
     >
       <h2 className="text-(--orangeBlume) text-2xl sm:text-3xl lg:text-4xl uppercase text-center">
-        Nuestros Productos <span className="font-clash-bold">Más vendidos</span>
+        Nuestros Productos{" "}
+        <span className="font-clash-bold">Más&nbsp;vendidos</span>
       </h2>
 
       <div className="best-sellers__viewport">
@@ -385,6 +407,7 @@ export default function BestSellers() {
       </div>
 
       {/* Controles inferiores */}
+
       {products.length > visibleItems && (
         <div className="best-sellers__dots">
           {Array.from({

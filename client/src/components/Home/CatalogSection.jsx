@@ -42,7 +42,7 @@ export default function CatalogSection() {
   return (
     <section
       className="
-        min-h-[calc(100vh-88px)]
+        h-auto
         w-full
         p-6
         lg:p-20

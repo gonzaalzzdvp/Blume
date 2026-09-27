@@ -67,7 +67,7 @@ export default function Checkout() {
 
       toast.success("Pedido creado correctamente");
 
-      const message = buildWhatsappMessage(order, cartItems);
+      const message = buildWhatsappMessage(order, cartItems, choices);
 
       const whatsappUrl = `https://wa.me/${SALES_PHONE}?text=${message}`;
 

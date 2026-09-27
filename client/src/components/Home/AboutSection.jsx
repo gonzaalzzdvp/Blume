@@ -2,7 +2,7 @@ import React from "react";
 
 export default function AboutSection() {
   return (
-    <section className="w-full py-12 px-6 md:py-16 md:px-10 lg:py-20 flex flex-col justify-center items-center gap-6 md:gap-8 lg:gap-10">
+    <section className="w-full pt-12 px-6 md:pt-16 md:px-10 lg:pt-20 flex flex-col justify-center items-center gap-6 md:gap-8 lg:gap-10">
       <h2 className="text-2xl sm:text-3xl lg:text-4xl text-(--yellowBlume) uppercase font-light text-center">
         ¡Hola{" "}
         <span className="text-(--yellowBlume) font-clash-bold">Blumie!</span>
