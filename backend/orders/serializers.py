@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import Order, OrderItem
 
 from products.models import Product
+from django.db import transaction
 
 
 class OrderItemCreateSerializer(
@@ -24,6 +25,10 @@ class OrderSerializer(
         many=True,
         write_only=True,
     )
+    
+    customer_email = serializers.EmailField(
+        required=True,
+    )
 
     class Meta:
 
@@ -32,12 +37,12 @@ class OrderSerializer(
         fields = "__all__"
 
         read_only_fields = [
-        "order_number",
-        "subtotal",
-        "total",
-        "status",
-        "created_at",
-    ]
+            "order_number",
+            "subtotal",
+            "total",
+            "status",
+            "created_at",
+        ]
 
     def validate(self, attrs):
 
@@ -86,42 +91,50 @@ class OrderSerializer(
 
     def create(self, validated_data):
 
-        items = validated_data.pop(
-            "items"
+        items = validated_data.pop("items")
+
+        request = self.context["request"]
+
+        user = (
+            request.user
+            if request.user.is_authenticated
+            else None
         )
 
-        order = Order.objects.create(
-            user=self.context["request"].user,
-            **validated_data
-        )
+        with transaction.atomic():
 
-        subtotal = 0
-
-        for item in items:
-
-            product = Product.objects.get(
-                id=item["product_id"]
+            order = Order.objects.create(
+                user=user,
+                **validated_data
             )
 
-            quantity = item["quantity"]
+            subtotal = 0
 
-            price = product.price
+            for item in items:
 
-            OrderItem.objects.create(
-                order=order,
-                product=product,
-                quantity=quantity,
-                unit_price=price,
+                product = Product.objects.get(
+                    id=item["product_id"]
+                )
+
+                quantity = item["quantity"]
+
+                price = product.price
+
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=quantity,
+                    unit_price=price,
+                )
+
+                subtotal += price * quantity
+
+            order.subtotal = subtotal
+            order.total = subtotal
+
+            order.save(
+                update_fields=["subtotal", "total", "updated_at"]
             )
-
-            subtotal += (
-                price * quantity
-            )
-
-        order.subtotal = subtotal
-        order.total = subtotal
-
-        order.save()
 
         return order
 

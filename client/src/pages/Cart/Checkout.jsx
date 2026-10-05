@@ -26,6 +26,7 @@ export default function Checkout() {
     customer_name: "",
     customer_phone: "",
     customer_document: "",
+    customer_email: "",
 
     payment_method: "",
 
@@ -126,6 +127,26 @@ export default function Checkout() {
             value={formData.customer_name}
             onChange={handleChange}
             disabled={isLoading}
+            className="
+              w-full
+              border-b
+              border-(--grayBlume)
+              p-3
+              outline-none
+              disabled:opacity-60
+              disabled:cursor-not-allowed
+            "
+          />
+
+          <input
+            type="email"
+            name="customer_email"
+            placeholder="Correo electrónico"
+            value={formData.customer_email}
+            onChange={handleChange}
+            disabled={isLoading}
+            required
+            autoComplete="email"
             className="
               w-full
               border-b

@@ -206,3 +206,10 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = (
     "cloudinary_storage.storage.MediaCloudinaryStorage"
 )
+
+BREVO_API_KEY = os.getenv("BREVO_API_KEY", "")
+
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "",
+)

@@ -105,6 +105,10 @@ class Order(models.Model):
         max_length=255,
     )
 
+    customer_email = models.EmailField(
+        blank=True,
+    )
+
     customer_phone = models.CharField(
         max_length=30,
     )
